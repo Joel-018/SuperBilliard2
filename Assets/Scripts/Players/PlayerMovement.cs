@@ -22,7 +22,9 @@ public class PlayerMovement : MonoBehaviour
     // Setter for position
     public void SetPosition(Vector3 pos)
     {
-        transform.position = pos;
+        // transform.position = pos;
+
+        GetComponent<Rigidbody>().MovePosition(pos);
     }
 
     // Getter for position
