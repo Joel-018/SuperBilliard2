@@ -6,42 +6,54 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
     private Rigidbody rb;
-    private SphereCollider colisionador;
-
-    public Collider colisionadorMesa;
-
     private AudioSource altavoz;
     public AudioClip sonidoAgujero;
-    private bool yaHaCaido = false;
+
+    public float targetScale; // 1
+    public float timeToReachTarget; // 2
+    private float startScale;  // 3
+    private float percentScaled; // 4
+    private bool check = true; // 4
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        colisionador = GetComponent<SphereCollider>();
         altavoz = GetComponent<AudioSource>();
+        startScale = transform.localScale.x;
     }
 
     
-
-
     void OnTriggerEnter(Collider otro)
     {
         if (otro.CompareTag("Hole"))
         {
-            yaHaCaido = true;
+            if (otro.CompareTag("Wall"))
+            {
+                rb.isKinematic = true;
+            }
+          
             if (sonidoAgujero != null)
             {
                 altavoz.PlayOneShot(sonidoAgujero);
             }
 
-            // NUEVO: Quitamos las restricciones del Rigidbody (desmarca la casilla Freeze Position Y)
-            rb.constraints = RigidbodyConstraints.None;
-
-            // Hacemos que ignore la mesa para que pueda caer a trav�s de ella
-            if (colisionadorMesa != null)
+            while (check)
             {
-                Physics.IgnoreCollision(colisionador, colisionadorMesa);
+                if (percentScaled < 1f) // 1
+                {
+                    percentScaled += Time.deltaTime / timeToReachTarget; // 2
+                    float scale = Mathf.Lerp(startScale, targetScale, percentScaled); // 3
+                    transform.localScale = new Vector3(scale, scale, scale); // 4
+                }
+                else
+                {
+                    check = false;
+                }
             }
+            
+
+            Destroy(gameObject, targetScale);
+
         }
     }
 }
