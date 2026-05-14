@@ -291,7 +291,15 @@ public class TrackingManager : MonoBehaviour
         if (kb.aKey.isPressed) move += Vector3.left;
         if (kb.dKey.isPressed) move += Vector3.right;
 
-        player.transform.Translate(move * Time.deltaTime * trackingDisabledPlayerSpeed);
+        // --- CÓDIGO MODIFICADO ---
+        if (move != Vector3.zero)
+        {
+            // Calculamos la nueva posición
+            Vector3 nuevaPosicion = player.transform.position + (move.normalized * trackingDisabledPlayerSpeed * Time.deltaTime);
+            
+            // Usamos MovePosition (físicas) en lugar de Translate (teletransporte)
+            player.GetComponent<Rigidbody>().MovePosition(nuevaPosicion);
+        }
     }
 
 /// <summary>
