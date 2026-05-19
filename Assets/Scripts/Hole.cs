@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-// EL NOMBRE DEBE SER Hole PARA QUE COINCIDA CON Hole.cs
 public class Hole : MonoBehaviour 
 {
     [Tooltip("Punto central y profundo del agujero hacia donde caerá la bola")]
@@ -16,12 +15,16 @@ public class Hole : MonoBehaviour
         // Detecta si es una bola
         if (other.CompareTag("Ball") || other.CompareTag("Ball8"))
         {
-            // ESTO NOS AVISARÁ EN LA CONSOLA SI LA COLISIÓN FUNCIONA
+            // --- EL CANDADO ANTI-DOBLE PUNTUACIÓN ---
+            // Le quitamos la etiqueta a la bola al instante. 
+            // Si el motor detecta otro choque un milisegundo después, ya no entrará en este 'if'.
+            other.tag = "Untagged"; 
+            // ----------------------------------------
+
             Debug.Log("¡La bola ha tocado el agujero!"); 
 
             if (GameModeManager.Instance != null)
             {
-                Debug.Log("¡Llamando al GameModeManager para sumar tiempo!");
                 GameModeManager.Instance.OnBallPotted();
             }
 
