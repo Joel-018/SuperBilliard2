@@ -1,5 +1,5 @@
 using UnityEngine;
-using UnityEngine.UI; // Importante para poder usar el Slider (la barra)
+using UnityEngine.UI;
 using TMPro;
 
 public class GameModeManager : MonoBehaviour
@@ -7,16 +7,16 @@ public class GameModeManager : MonoBehaviour
     public static GameModeManager Instance;
 
     [Header("Configuración")]
-    public float timeRemaining = 15f; 
-    private int totalBalls;           
-    private bool gameEnded = false;   
+    public float timeRemaining = 15f;
+    public int totalBalls; // <--- Ahora es pública      
+    private bool gameEnded = false;
 
     [Header("Textos de la Interfaz")]
     public TextMeshProUGUI timerText;
     public TextMeshProUGUI resultMessageText;
-    
+
     [Header("Barra Visual")]
-    public Slider timerBar; // <-- Aquí metemos la nueva barra
+    public Slider timerBar;
 
     void Awake()
     {
@@ -27,10 +27,9 @@ public class GameModeManager : MonoBehaviour
     void Start()
     {
         totalBalls = GameObject.FindGameObjectsWithTag("Ball").Length;
-        if(resultMessageText != null) resultMessageText.gameObject.SetActive(false);
+        if (resultMessageText != null) resultMessageText.gameObject.SetActive(false);
 
-        // Configuramos la barra al inicio para que coincida con el tiempo
-        if(timerBar != null)
+        if (timerBar != null)
         {
             timerBar.maxValue = timeRemaining;
             timerBar.value = timeRemaining;
@@ -43,18 +42,17 @@ public class GameModeManager : MonoBehaviour
 
         if (timeRemaining > 0)
         {
-            timeRemaining -= Time.deltaTime; 
+            timeRemaining -= Time.deltaTime;
             timerText.text = "Tiempo: " + Mathf.Ceil(timeRemaining).ToString() + "s";
-            
-            // Actualizamos la barra de forma fluida cada frame
-            if(timerBar != null) timerBar.value = timeRemaining;
+
+            if (timerBar != null) timerBar.value = timeRemaining;
         }
         else
         {
             timeRemaining = 0;
             timerText.text = "Tiempo: 0s";
-            if(timerBar != null) timerBar.value = 0;
-            LoseGame(); // Llama al mensaje de derrota
+            if (timerBar != null) timerBar.value = 0;
+            LoseGame();
         }
     }
 
@@ -62,33 +60,38 @@ public class GameModeManager : MonoBehaviour
     {
         if (gameEnded) return;
 
-        timeRemaining += 10f; // Sube 10 segundos
-        totalBalls--;         
+        timeRemaining += 10f;
+        totalBalls--;
 
-        // Si al sumar tiempo nos pasamos del máximo original de la barra, la hacemos más grande
-        if(timerBar != null && timeRemaining > timerBar.maxValue)
+        if (timerBar != null && timeRemaining > timerBar.maxValue)
         {
-            timerBar.maxValue = timeRemaining; 
+            timerBar.maxValue = timeRemaining;
         }
 
+        // --- LA MAGIA ESTÁ AQUÍ ---
+        // Si ya no quedan bolas normales, buscamos la Bola 8 y la hacemos sólida
         if (totalBalls <= 0)
         {
-            WinGame();
+            GameObject bola8 = GameObject.FindGameObjectWithTag("Ball8");
+            if (bola8 != null)
+            {
+                bola8.GetComponent<BallMovement>().HacerSolidaParaJugador();
+            }
         }
     }
 
-    void WinGame()
+    public void WinGame()
     {
         gameEnded = true;
         resultMessageText.text = "¡GANASTE!";
-        resultMessageText.color = Color.green;
+        resultMessageText.color = Color.green; // <--- Te lo he cambiado a verde
         resultMessageText.gameObject.SetActive(true);
     }
 
-    void LoseGame()
+    public void LoseGame(string mensaje = "¡PERDISTE!\nSe acabó el tiempo.")
     {
         gameEnded = true;
-        resultMessageText.text = "¡PERDISTE!\nSe acabó el tiempo.";
+        resultMessageText.text = mensaje;
         resultMessageText.color = Color.red;
         resultMessageText.gameObject.SetActive(true);
     }

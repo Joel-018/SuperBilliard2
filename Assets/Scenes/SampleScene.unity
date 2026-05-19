@@ -838,7 +838,6 @@ GameObject:
   - component: {fileID: 237021352}
   - component: {fileID: 237021351}
   - component: {fileID: 237021350}
-  - component: {fileID: 237021353}
   m_Layer: 0
   m_Name: Hole4
   m_TagString: Hole
@@ -855,7 +854,7 @@ Transform:
   m_GameObject: {fileID: 237021347}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.1, y: -0.55, z: -4.17}
+  m_LocalPosition: {x: -4.1, y: -0.91, z: -4.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -937,20 +936,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 237021347}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &237021353
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 237021347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee1a08221fec7b043b9a99c6cafa706c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fondoDelAgujero: {fileID: 237021348}
-  velocidadCaida: 5
 --- !u!1 &240671478
 GameObject:
   m_ObjectHideFlags: 0
@@ -1576,7 +1561,7 @@ Transform:
   m_GameObject: {fileID: 377455312}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -44.1, y: -21.3, z: 29.2}
+  m_LocalPosition: {x: 25.6, y: -21.3, z: -34.3}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1693,9 +1678,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sonidoAgujero: {fileID: 8300000, guid: 52d5ae410dfd21e47840e83eac5f3e39, type: 3}
   sonidoChoque: {fileID: 8300000, guid: 1343fe4078c0de6458c19df009e54fa7, type: 3}
-  targetScale: 0.5
-  timeToReachTarget: 7
+  targetScale: 0
+  timeToReachTarget: 2
   fuerzaImpulso: 5
+  tiempoAntiArrastre: 6
 --- !u!54 &377455316
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2163,7 +2149,7 @@ Transform:
   m_GameObject: {fileID: 444283911}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -11.6, y: -21.3, z: -0.2}
+  m_LocalPosition: {x: 25.9, y: -21.3, z: -45.9}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2280,9 +2266,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sonidoAgujero: {fileID: 8300000, guid: 52d5ae410dfd21e47840e83eac5f3e39, type: 3}
   sonidoChoque: {fileID: 8300000, guid: 1343fe4078c0de6458c19df009e54fa7, type: 3}
-  targetScale: 0.5
-  timeToReachTarget: 7
+  targetScale: 0
+  timeToReachTarget: 2
   fuerzaImpulso: 5
+  tiempoAntiArrastre: 6
 --- !u!54 &444283915
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -2354,7 +2341,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: fc528ea684425d645b56f483c6a7730f, type: 2}
+  - {fileID: 2100000, guid: 2ccfd250a9352a945bdacf9dc2aa4a75, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -2607,7 +2594,7 @@ Transform:
   m_GameObject: {fileID: 480425779}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -15.6, y: -21.3, z: 5.7}
+  m_LocalPosition: {x: 18.8, y: -21.3, z: -33.9}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2724,9 +2711,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sonidoAgujero: {fileID: 8300000, guid: 52d5ae410dfd21e47840e83eac5f3e39, type: 3}
   sonidoChoque: {fileID: 8300000, guid: 1343fe4078c0de6458c19df009e54fa7, type: 3}
-  targetScale: 0.5
-  timeToReachTarget: 7
+  targetScale: 0
+  timeToReachTarget: 2
   fuerzaImpulso: 5
+  tiempoAntiArrastre: 6
 --- !u!54 &480425783
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3027,7 +3015,6 @@ GameObject:
   - component: {fileID: 526567746}
   - component: {fileID: 526567745}
   - component: {fileID: 526567744}
-  - component: {fileID: 526567747}
   m_Layer: 0
   m_Name: Hole3
   m_TagString: Hole
@@ -3044,7 +3031,7 @@ Transform:
   m_GameObject: {fileID: 526567741}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.1, y: -0.55, z: -4.17}
+  m_LocalPosition: {x: 4.1, y: -0.9, z: -4.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3126,20 +3113,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 526567741}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &526567747
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 526567741}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee1a08221fec7b043b9a99c6cafa706c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fondoDelAgujero: {fileID: 526567742}
-  velocidadCaida: 5
 --- !u!1 &535671811
 GameObject:
   m_ObjectHideFlags: 0
@@ -3171,7 +3144,7 @@ Transform:
   m_GameObject: {fileID: 535671811}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.7, y: -21.3, z: 22.5}
+  m_LocalPosition: {x: 9.3, y: -21.3, z: -41}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3288,9 +3261,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sonidoAgujero: {fileID: 8300000, guid: 52d5ae410dfd21e47840e83eac5f3e39, type: 3}
   sonidoChoque: {fileID: 8300000, guid: 1343fe4078c0de6458c19df009e54fa7, type: 3}
-  targetScale: 0.5
-  timeToReachTarget: 7
+  targetScale: 0
+  timeToReachTarget: 2
   fuerzaImpulso: 5
+  tiempoAntiArrastre: 6
 --- !u!54 &535671815
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3362,7 +3336,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6e11a340128458f4d8ae7bc7410e7517, type: 2}
+  - {fileID: 2100000, guid: fc528ea684425d645b56f483c6a7730f, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3533,7 +3507,7 @@ Transform:
   m_GameObject: {fileID: 563380465}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 27.6, y: -21.3, z: -41.3}
+  m_LocalPosition: {x: 25.8, y: -21.3, z: -50.9}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3650,9 +3624,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sonidoAgujero: {fileID: 8300000, guid: 52d5ae410dfd21e47840e83eac5f3e39, type: 3}
   sonidoChoque: {fileID: 8300000, guid: 1343fe4078c0de6458c19df009e54fa7, type: 3}
-  targetScale: 0.5
+  targetScale: 0
   timeToReachTarget: 2
-  fuerzaImpulso: 5
+  fuerzaImpulso: 10
+  tiempoAntiArrastre: 6
 --- !u!54 &563380469
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -3724,7 +3699,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 2ccfd250a9352a945bdacf9dc2aa4a75, type: 2}
+  - {fileID: 2100000, guid: 6530ef5a06633ff47845bfe2b4f2c36b, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3936,7 +3911,6 @@ GameObject:
   - component: {fileID: 662097098}
   - component: {fileID: 662097097}
   - component: {fileID: 662097096}
-  - component: {fileID: 662097099}
   m_Layer: 0
   m_Name: Hole2
   m_TagString: Hole
@@ -3953,7 +3927,7 @@ Transform:
   m_GameObject: {fileID: 662097093}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.1, y: -0.55, z: 4.17}
+  m_LocalPosition: {x: -4.1, y: -0.93, z: 4.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4035,20 +4009,6 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 662097093}
   m_Mesh: {fileID: 10206, guid: 0000000000000000e000000000000000, type: 0}
---- !u!114 &662097099
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 662097093}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee1a08221fec7b043b9a99c6cafa706c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fondoDelAgujero: {fileID: 662097094}
-  velocidadCaida: 5
 --- !u!1 &713694301
 GameObject:
   m_ObjectHideFlags: 0
@@ -5129,7 +5089,7 @@ GameObject:
   - component: {fileID: 1153716223}
   m_Layer: 0
   m_Name: Sphere8
-  m_TagString: Ball
+  m_TagString: Ball8
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -5143,7 +5103,7 @@ Transform:
   m_GameObject: {fileID: 1153716221}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -19.6, y: -21.3, z: 0.2}
+  m_LocalPosition: {x: 5.5, y: -21.3, z: -32.4}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5260,9 +5220,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sonidoAgujero: {fileID: 8300000, guid: 52d5ae410dfd21e47840e83eac5f3e39, type: 3}
   sonidoChoque: {fileID: 8300000, guid: 1343fe4078c0de6458c19df009e54fa7, type: 3}
-  targetScale: 0.5
-  timeToReachTarget: 7
+  targetScale: 0
+  timeToReachTarget: 2
   fuerzaImpulso: 5
+  tiempoAntiArrastre: 6
 --- !u!54 &1153716225
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -5271,9 +5232,9 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1153716221}
   serializedVersion: 5
-  m_Mass: 1000
-  m_LinearDamping: 500
-  m_AngularDamping: 700
+  m_Mass: 20
+  m_LinearDamping: 3
+  m_AngularDamping: 5.5
   m_CenterOfMass: {x: 0, y: 0, z: 0}
   m_InertiaTensor: {x: 1, y: 1, z: 1}
   m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
@@ -5334,7 +5295,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 6530ef5a06633ff47845bfe2b4f2c36b, type: 2}
+  - {fileID: 2100000, guid: 247fe954a20cfae44bdf7164d066eb38, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -5513,6 +5474,7 @@ MonoBehaviour:
   targetScale: 0
   timeToReachTarget: 0
   fuerzaImpulso: 5
+  tiempoAntiArrastre: 0
 --- !u!1 &1160217041
 GameObject:
   m_ObjectHideFlags: 0
@@ -5574,6 +5536,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeRemaining: 15
+  totalBalls: 0
   timerText: {fileID: 907750994}
   resultMessageText: {fileID: 145679274}
   timerBar: {fileID: 1162354270}
@@ -6318,7 +6281,7 @@ Transform:
   m_GameObject: {fileID: 1316561281}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: -22.67, z: 0}
+  m_LocalPosition: {x: 0, y: -23.08, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7604,7 +7567,6 @@ GameObject:
   - component: {fileID: 1628825877}
   - component: {fileID: 1628825876}
   - component: {fileID: 1628825875}
-  - component: {fileID: 1628825879}
   m_Layer: 0
   m_Name: Hole1
   m_TagString: Hole
@@ -7697,26 +7659,12 @@ Transform:
   m_GameObject: {fileID: 1628825874}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4.1, y: -0.55, z: 4.17}
+  m_LocalPosition: {x: 4.1, y: -0.96, z: 4.17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 472907965}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1628825879
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1628825874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ee1a08221fec7b043b9a99c6cafa706c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  fondoDelAgujero: {fileID: 1628825878}
-  velocidadCaida: 5
 --- !u!1 &1651423294
 GameObject:
   m_ObjectHideFlags: 0
@@ -8322,7 +8270,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 8c69a74f710554c4688451edaea948df, type: 2}
+  - {fileID: 2100000, guid: 6e11a340128458f4d8ae7bc7410e7517, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -8361,7 +8309,7 @@ Transform:
   m_GameObject: {fileID: 1739390791}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 21.4, y: -21.3, z: 23.2}
+  m_LocalPosition: {x: 17, y: -21.3, z: -40.4}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8408,9 +8356,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sonidoAgujero: {fileID: 8300000, guid: 52d5ae410dfd21e47840e83eac5f3e39, type: 3}
   sonidoChoque: {fileID: 8300000, guid: 1343fe4078c0de6458c19df009e54fa7, type: 3}
-  targetScale: 0.5
-  timeToReachTarget: 3
+  targetScale: 0
+  timeToReachTarget: 2
   fuerzaImpulso: 5
+  tiempoAntiArrastre: 6
 --- !u!82 &1739390798
 AudioSource:
   m_ObjectHideFlags: 0
@@ -9441,7 +9390,7 @@ Transform:
   m_GameObject: {fileID: 1889702046}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -48.7, y: -21.3, z: -41.5}
+  m_LocalPosition: {x: 20.1, y: -21.3, z: -48.7}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9558,9 +9507,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sonidoAgujero: {fileID: 8300000, guid: 52d5ae410dfd21e47840e83eac5f3e39, type: 3}
   sonidoChoque: {fileID: 8300000, guid: 1343fe4078c0de6458c19df009e54fa7, type: 3}
-  targetScale: 0.5
+  targetScale: 0
   timeToReachTarget: 2
   fuerzaImpulso: 5
+  tiempoAntiArrastre: 6
 --- !u!54 &1889702050
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -9632,7 +9582,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 247fe954a20cfae44bdf7164d066eb38, type: 2}
+  - {fileID: 2100000, guid: 8c69a74f710554c4688451edaea948df, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -10095,7 +10045,7 @@ Transform:
   m_GameObject: {fileID: 2039963491}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -30.8, y: 0, z: -28}
+  m_LocalPosition: {x: -20.5, y: 0, z: -1.3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10345,7 +10295,7 @@ Transform:
   m_GameObject: {fileID: 2082586450}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -3.9, y: -22.67, z: 2.6}
+  m_LocalPosition: {x: 31.1, y: -22.67, z: -37.6}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []

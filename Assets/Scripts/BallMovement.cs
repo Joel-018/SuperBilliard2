@@ -1,79 +1,109 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
-public class PlayerController : MonoBehaviour // Nota: en tu código original este script se llama PlayerController aunque el archivo es BallMovement.cs
+public class BallMovement : MonoBehaviour
 {
     private Rigidbody rb;
     private AudioSource altavoz;
+    private Collider miCollider;
 
     [Header("Sonidos")]
     public AudioClip sonidoAgujero;
-    [Tooltip("Sonido que se reproduce al chocar con otra bola o el jugador")]
     public AudioClip sonidoChoque;
 
     [Header("Escala del Agujero")]
-    public float targetScale; // 1
-    public float timeToReachTarget; // 2
-    private float startScale;  // 3
-    private float percentScaled; // 4
-    private bool check = true; // 4
+    public float targetScale;
+    public float timeToReachTarget;
+    private float startScale;
+    private float percentScaled;
+    private bool check = true;
 
     [Header("Físicas de Colisión")]
-    [Tooltip("Velocidad directa que recibe la bola al ser golpeada por la blanca")]
-    public float fuerzaImpulso = 10f; // Ajusta este valor en Unity según necesites (empieza probando con 10 o 15)
+    public float fuerzaImpulso;
+    public float tiempoAntiArrastre = 2f;
+
+    private List<Collider> jugadoresEnCooldown = new List<Collider>();
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         altavoz = GetComponent<AudioSource>();
         startScale = transform.localScale.x;
+        miCollider = GetComponent<Collider>();
+
+        // --- REGLA INICIAL DE LA BOLA 8 ---
+        if (gameObject.CompareTag("Ball8"))
+        {
+            IgnorarColisionConJugadores(true); // Se hace fantasma para los jugadores
+        }
     }
 
-    // --- NUEVO CÓDIGO: Detectar colisiones para el sonido y el empuje ---
     void OnCollisionEnter(Collision colision)
     {
-        // 1. REPRODUCIR SONIDO DE CHOQUE
-        // Comprobamos si con lo que hemos chocado es el jugador u otra bola
+        // 1. REPRODUCIR SONIDO
         if (colision.gameObject.CompareTag("Player") || colision.gameObject.CompareTag("Ball") || colision.gameObject.CompareTag("Ball8"))
         {
-            if (sonidoChoque != null && altavoz != null)
-            {
-                altavoz.PlayOneShot(sonidoChoque);
-            }
+            if (sonidoChoque != null && altavoz != null) altavoz.PlayOneShot(sonidoChoque);
         }
 
-        // 2. EMPUJE FÍSICO (Solo si nos golpea el jugador con WASD/Tracker)
-        if (colision.gameObject.CompareTag("Player")) 
+        // 2. EMPUJE FÍSICO 
+        if (colision.gameObject.CompareTag("Player"))
         {
+            Collider playerCollider = colision.collider;
+
+            if (jugadoresEnCooldown.Contains(playerCollider)) return;
+
             Vector3 direccionEmpuje = transform.position - colision.transform.position;
-            direccionEmpuje.y = 0; // Evitamos que salte hacia arriba
+            direccionEmpuje.y = 0;
             direccionEmpuje.Normalize();
             rb.linearVelocity = direccionEmpuje * fuerzaImpulso;
+
+            StartCoroutine(ActivarCooldownJugador(playerCollider));
         }
     }
-    // ---------------------------------------------------------------------
+
+    private IEnumerator ActivarCooldownJugador(Collider playerCollider)
+    {
+        jugadoresEnCooldown.Add(playerCollider);
+        Physics.IgnoreCollision(miCollider, playerCollider, true);
+
+        yield return new WaitForSeconds(tiempoAntiArrastre);
+
+        Physics.IgnoreCollision(miCollider, playerCollider, false);
+        jugadoresEnCooldown.Remove(playerCollider);
+    }
 
     void OnTriggerEnter(Collider otro)
     {
         if (otro.CompareTag("Hole"))
         {
-            if (otro.CompareTag("Wall"))
-            {
-                rb.isKinematic = true;
-            }
-          
-            if (sonidoAgujero != null)
-            {
-                altavoz.PlayOneShot(sonidoAgujero);
-            }
+            rb.isKinematic = true;
 
-            StartCoroutine(CaerPorElAgujero()); // Mantenemos la Corrutina que me has pasado
+            // --- LÓGICA DE CONDICIÓN DE PARTIDA ---
+            if (gameObject.CompareTag("Ball8"))
+            {
+                // Consultamos directamente al Manager, es mucho más rápido y seguro
+                if (GameModeManager.Instance.totalBalls > 0)
+                {
+                    GameModeManager.Instance.LoseGame("¡PERDISTE!\nLa Bola 8 cayó antes de tiempo.");
+                }
+                else
+                {
+                    GameModeManager.Instance.WinGame();
+                }
+            }
+            else if (gameObject.CompareTag("Ball"))
+            {
+                GameModeManager.Instance.OnBallPotted();
+            }
+            // ----------------------------------------------------------
+
+            if (sonidoAgujero != null) altavoz.PlayOneShot(sonidoAgujero);
+            StartCoroutine(CaerPorElAgujero());
         }
     }
 
-    // Corrutina para animar la caída de forma fluida
     IEnumerator CaerPorElAgujero()
     {
         while (check)
@@ -83,13 +113,36 @@ public class PlayerController : MonoBehaviour // Nota: en tu código original es
                 percentScaled += Time.deltaTime / timeToReachTarget;
                 float scale = Mathf.Lerp(startScale, targetScale, percentScaled);
                 transform.localScale = new Vector3(scale, scale, scale);
-                yield return null; // Espera al siguiente frame
+                yield return null;
             }
             else
             {
                 check = false;
             }
         }
-        Destroy(gameObject, targetScale);
+        Destroy(gameObject);
+    }
+
+    // --- FUNCIONES EXCLUSIVAS PARA LA BOLA 8 ---
+
+    // El Manager llamará a esta función cuando ya no queden bolas normales
+    public void HacerSolidaParaJugador()
+    {
+        IgnorarColisionConJugadores(false); // Vuelve a ser sólida
+        Debug.Log("¡Última bola! La Bola 8 ya es vulnerable al jugador.");
+    }
+
+    // Activa o desactiva las físicas solo contra los jugadores
+    private void IgnorarColisionConJugadores(bool ignorar)
+    {
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        foreach (GameObject p in players)
+        {
+            Collider colPlayer = p.GetComponent<Collider>();
+            if (colPlayer != null)
+            {
+                Physics.IgnoreCollision(miCollider, colPlayer, ignorar);
+            }
+        }
     }
 }
