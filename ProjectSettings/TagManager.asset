@@ -9,6 +9,7 @@ TagManager:
   - Hole
   - Ball
   - Ball8
+  - CirculoInicio
   layers:
   - Default
   - TransparentFX
