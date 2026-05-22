@@ -65,14 +65,16 @@ public class BallMovement : MonoBehaviour
 
     private IEnumerator ActivarCooldownJugador(Collider playerCollider)
     {
-        jugadoresEnCooldown.Add(playerCollider);
-        Physics.IgnoreCollision(miCollider, playerCollider, true);
+         yield return new WaitForSeconds(2f);
 
-        yield return new WaitForSeconds(tiempoAntiArrastre);
+         jugadoresEnCooldown.Add(playerCollider);
+         Physics.IgnoreCollision(miCollider, playerCollider, true);
 
-        Physics.IgnoreCollision(miCollider, playerCollider, false);
-        jugadoresEnCooldown.Remove(playerCollider);
-    }
+         yield return new WaitForSeconds(tiempoAntiArrastre);
+
+         Physics.IgnoreCollision(miCollider, playerCollider, false);
+         jugadoresEnCooldown.Remove(playerCollider);
+     }
 
     void OnTriggerEnter(Collider otro)
     {
