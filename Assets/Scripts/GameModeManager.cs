@@ -7,7 +7,7 @@ public class GameModeManager : MonoBehaviour
     public static GameModeManager Instance;
 
     [Header("Configuración")]
-    public float timeRemaining = 15f;
+    public float timeRemaining = 30f;
     public int totalBalls; // <--- Ahora es pública      
     private bool gameEnded = false;
 
