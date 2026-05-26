@@ -24,6 +24,9 @@ public class BallMovement : MonoBehaviour
     public float tiempoAntiArrastre = 2f;
 
     private List<Collider> jugadoresEnCooldown = new List<Collider>();
+    
+    // --- NUEVO: CANDADO PARA EVITAR QUE PUNTÚE VARIAS VECES ---
+    private bool yaHaCaido = false;
 
     void Start()
     {
@@ -32,22 +35,19 @@ public class BallMovement : MonoBehaviour
         startScale = transform.localScale.x;
         miCollider = GetComponent<Collider>();
 
-        // --- REGLA INICIAL DE LA BOLA 8 ---
         if (gameObject.CompareTag("Ball8"))
         {
-            IgnorarColisionConJugadores(true); // Se hace fantasma para los jugadores
+            IgnorarColisionConJugadores(true); 
         }
     }
 
     void OnCollisionEnter(Collision colision)
     {
-        // 1. REPRODUCIR SONIDO
         if (colision.gameObject.CompareTag("Player") || colision.gameObject.CompareTag("Ball") || colision.gameObject.CompareTag("Ball8"))
         {
             if (sonidoChoque != null && altavoz != null) altavoz.PlayOneShot(sonidoChoque);
         }
 
-        // 2. EMPUJE FÍSICO 
         if (colision.gameObject.CompareTag("Player"))
         {
             Collider playerCollider = colision.collider;
@@ -66,26 +66,23 @@ public class BallMovement : MonoBehaviour
     private IEnumerator ActivarCooldownJugador(Collider playerCollider)
     {
          yield return new WaitForSeconds(2f);
-
          jugadoresEnCooldown.Add(playerCollider);
          Physics.IgnoreCollision(miCollider, playerCollider, true);
-
          yield return new WaitForSeconds(tiempoAntiArrastre);
-
          Physics.IgnoreCollision(miCollider, playerCollider, false);
          jugadoresEnCooldown.Remove(playerCollider);
      }
 
     void OnTriggerEnter(Collider otro)
     {
-        if (otro.CompareTag("Hole"))
+        // --- AQUÍ ESTÁ LA MAGIA: Comprobamos que !yaHaCaido ---
+        if (otro.CompareTag("Hole") && !yaHaCaido)
         {
+            yaHaCaido = true; // Echamos el candado. Ya no volverá a contar esta bola.
             rb.isKinematic = true;
 
-            // --- LÓGICA DE CONDICIÓN DE PARTIDA ---
             if (gameObject.CompareTag("Ball8"))
             {
-                // Consultamos directamente al Manager, es mucho más rápido y seguro
                 if (GameModeManager.Instance.totalBalls > 0)
                 {
                     GameModeManager.Instance.LoseGame("¡PERDISTE!\nLa Bola 8 cayó antes de tiempo.");
@@ -99,7 +96,6 @@ public class BallMovement : MonoBehaviour
             {
                 GameModeManager.Instance.OnBallPotted();
             }
-            // ----------------------------------------------------------
 
             if (sonidoAgujero != null) altavoz.PlayOneShot(sonidoAgujero);
             StartCoroutine(CaerPorElAgujero());
@@ -125,16 +121,12 @@ public class BallMovement : MonoBehaviour
         Destroy(gameObject);
     }
 
-    // --- FUNCIONES EXCLUSIVAS PARA LA BOLA 8 ---
-
-    // El Manager llamará a esta función cuando ya no queden bolas normales
     public void HacerSolidaParaJugador()
     {
-        IgnorarColisionConJugadores(false); // Vuelve a ser sólida
+        IgnorarColisionConJugadores(false); 
         Debug.Log("¡Última bola! La Bola 8 ya es vulnerable al jugador.");
     }
 
-    // Activa o desactiva las físicas solo contra los jugadores
     private void IgnorarColisionConJugadores(bool ignorar)
     {
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
