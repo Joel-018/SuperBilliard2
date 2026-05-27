@@ -334,7 +334,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 95f08dc91911e5f4cabc8f750dbaaece, type: 2}
+  - {fileID: 2100000, guid: 7bd18b71c7f45c448bba4a3800391308, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1137,7 +1137,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 95f08dc91911e5f4cabc8f750dbaaece, type: 2}
+  - {fileID: 2100000, guid: 7bd18b71c7f45c448bba4a3800391308, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1335,7 +1335,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 95f08dc91911e5f4cabc8f750dbaaece, type: 2}
+  - {fileID: 2100000, guid: 7bd18b71c7f45c448bba4a3800391308, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -3810,7 +3810,7 @@ MonoBehaviour:
   - {fileID: 7283905098806670637, guid: 63108b2644127fd4da9c33102e142d08, type: 3}
   - {fileID: 5973359570602638343, guid: 9321713398fd1a44caf5b3fdb1a0c08f, type: 3}
   - {fileID: 5815161325017644928, guid: 531d7a6fe4e802a4c804a3dd0e5e9e4f, type: 3}
-  manoVillanoPrefab: {fileID: 0}
+  manoVillanoPrefab: {fileID: 919132149155446097, guid: 14ca013e548b4484d8cb65a7f8cc0615, type: 3}
   centroDelTablero: {fileID: 606655059}
   fuerzaDelTornado: 50
   duracionTornado: 3
@@ -5642,7 +5642,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 95f08dc91911e5f4cabc8f750dbaaece, type: 2}
+  - {fileID: 2100000, guid: 7bd18b71c7f45c448bba4a3800391308, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
