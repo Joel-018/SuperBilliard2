@@ -21,11 +21,13 @@ public class GameModeManager : MonoBehaviour
     public int totalBalls;      
     private bool gameEnded = false;
 
+    // --- NUEVA VARIABLE PARA EL TOPE DE TIEMPO ---
+    private float tiempoMaximo; 
+
     [Header("Pruebas y Debug")]
     [Tooltip("Elige qué evento saldrá. Déjalo en 'Aleatorio' para jugar una partida normal.")]
     public ModoPruebaEvento forzarEvento = ModoPruebaEvento.Aleatorio;
 
-    // --- VARIABLES PARA LA MITAD DE PARTIDA ---
     private int bolasIniciales;
     private bool eventoYaLanzado = false;
     
@@ -34,11 +36,8 @@ public class GameModeManager : MonoBehaviour
     public GameObject manoVillanoPrefab; 
     public Transform centroDelTablero; 
     
-    [Tooltip("Fuerza de cada soplido del tornado")]
     public float fuerzaDelTornado = 30f; 
-    [Tooltip("Duración en segundos del tornado")]
     public float duracionTornado = 5f;
-    [Tooltip("Distancia del triángulo al invocar bolas (Villano)")]
     public float separacionBolasVillano = 3f;
 
     [Header("Audios de Eventos")]
@@ -63,9 +62,11 @@ public class GameModeManager : MonoBehaviour
 
     void Start()
     {
-        // Contamos las bolas al inicio 
         totalBalls = GameObject.FindGameObjectsWithTag("Ball").Length;
         bolasIniciales = totalBalls; 
+        
+        // GUARDAMOS EL TIEMPO INICIAL COMO EL LÍMITE MÁXIMO
+        tiempoMaximo = timeRemaining; 
         
         altavoz = GetComponent<AudioSource>();
         if (altavoz == null) altavoz = gameObject.AddComponent<AudioSource>();
@@ -75,7 +76,7 @@ public class GameModeManager : MonoBehaviour
 
         if (timerBar != null)
         {
-            timerBar.maxValue = timeRemaining;
+            timerBar.maxValue = tiempoMaximo;
             timerBar.value = timeRemaining;
         }
     }
@@ -103,24 +104,26 @@ public class GameModeManager : MonoBehaviour
     {
         if (gameEnded) return;
 
+        // Sumamos 10 segundos por meter la bola
         timeRemaining += 10f;
-        totalBalls--;
 
-        if (timerBar != null && timeRemaining > timerBar.maxValue)
+        // --- LA MAGIA DEL TOPE DE TIEMPO ---
+        // Si al sumar nos hemos pasado del tiempo inicial, lo recortamos
+        if (timeRemaining > tiempoMaximo)
         {
-            timerBar.maxValue = timeRemaining;
+            timeRemaining = tiempoMaximo;
         }
 
-        // --- COMPROBACIÓN DE EVENTO (NUEVA FÓRMULA) ---
+        totalBalls--;
+
+        // Comprobación de evento a mitad de partida
         int bolasMetidas = bolasIniciales - totalBalls;
         
-        // Si teníamos 7 bolas, la mitad entera es 3. Salta al meter 3 bolas.
         if (!eventoYaLanzado && bolasMetidas >= (bolasIniciales / 2))
         {
             LanzarEventoAleatorio();
         }
 
-        // --- MAGIA BOLA 8 ---
         if (totalBalls <= 0)
         {
             GameObject bola8 = GameObject.FindGameObjectWithTag("Ball8");
@@ -137,7 +140,7 @@ public class GameModeManager : MonoBehaviour
 
     private void LanzarEventoAleatorio()
     {
-        eventoYaLanzado = true; // Solo ocurre 1 vez
+        eventoYaLanzado = true;
         
         int eventoElegido;
         if (forzarEvento == ModoPruebaEvento.Aleatorio) eventoElegido = Random.Range(0, 3);
@@ -168,7 +171,6 @@ public class GameModeManager : MonoBehaviour
         textoAMostrar.gameObject.SetActive(false);
     }
 
-    // --- EVENTO 1: TORNADO (Duradero y con agujeros bloqueados) ---
     private IEnumerator EventoTornado()
     {
         StartCoroutine(MostrarMensajeEvento("¡CUIDADO!\n¡Un Tornado Salvaje!"));
@@ -211,7 +213,6 @@ public class GameModeManager : MonoBehaviour
         }
     }
 
-    // --- EVENTO 2: VILLANO (3 bolas en triángulo) ---
     private IEnumerator EventoVillano()
     {
         StartCoroutine(MostrarMensajeEvento("¡EL VILLANO HACE TRAMPAS!\nAñade 3 bolas nuevas"));
@@ -229,16 +230,12 @@ public class GameModeManager : MonoBehaviour
         {
             float dist = separacionBolasVillano;
 
-            // Coordenadas matemáticas para un triángulo perfecto
             Vector3[] posicionesTriangulo = new Vector3[3] {
-                new Vector3(0, 0, dist),               // Punta de arriba
-                new Vector3(-dist, 0, -dist),          // Abajo izquierda
-                new Vector3(dist, 0, -dist)            // Abajo derecha
+                new Vector3(0, 0, dist),               
+                new Vector3(-dist, 0, -dist),          
+                new Vector3(dist, 0, -dist)            
             };
 
-            Debug.Log("Villano lanza EXACTAMENTE 3 bolas de golpe.");
-
-            // Bucle que siempre se ejecuta 3 veces
             for (int i = 0; i < 3; i++)
             {
                 int indiceAleatorio = Random.Range(0, prefabsDeBolas.Length);
@@ -251,7 +248,6 @@ public class GameModeManager : MonoBehaviour
         }
     }
 
-    // --- EVENTO 3: GRAVEDAD (Fuerzas físicas masivas) ---
     private void EventoGravedad()
     {
         StartCoroutine(MostrarMensajeEvento("¡ALERTA!\nLas bolas ahora son muy pesadas"));
@@ -274,8 +270,6 @@ public class GameModeManager : MonoBehaviour
             }
         }
     }
-
-    // ==========================================
 
     public void WinGame()
     {

@@ -3799,9 +3799,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 64e218c1c9e21dd409eaa5a1c3bb3e78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timeRemaining: 200
+  timeRemaining: 15
   totalBalls: 0
-  forzarEvento: 2
+  forzarEvento: 0
   prefabsDeBolas:
   - {fileID: 1053205448946223583, guid: 4d4cf5f09e85e7d4ca52ef84a7760359, type: 3}
   - {fileID: 5886263480070877226, guid: 593a3d2fe1868f4479609c74b7b7ee27, type: 3}
@@ -3812,12 +3812,12 @@ MonoBehaviour:
   - {fileID: 5815161325017644928, guid: 531d7a6fe4e802a4c804a3dd0e5e9e4f, type: 3}
   manoVillanoPrefab: {fileID: 0}
   centroDelTablero: {fileID: 606655059}
-  fuerzaDelTornado: 100
+  fuerzaDelTornado: 50
   duracionTornado: 3
   separacionBolasVillano: 3
-  sonidoTornado: {fileID: 0}
-  sonidoVillano: {fileID: 0}
-  sonidoGravedad: {fileID: 0}
+  sonidoTornado: {fileID: 8300000, guid: c2d597ff7842e0e4ebf7edbdf038d20c, type: 3}
+  sonidoVillano: {fileID: 8300000, guid: 973b7d6ad08d23249929a55c34e6b305, type: 3}
+  sonidoGravedad: {fileID: 8300000, guid: b91de8a3754dda0409f89e55c874d1a2, type: 3}
   timerText: {fileID: 907750994}
   resultMessageText: {fileID: 145679274}
   eventMessageText: {fileID: 0}
@@ -4312,6 +4312,7 @@ GameObject:
   - component: {fileID: 1316561284}
   - component: {fileID: 1316561283}
   - component: {fileID: 1316561282}
+  - component: {fileID: 1316561287}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -4415,12 +4416,31 @@ Transform:
   m_GameObject: {fileID: 1316561281}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.1, z: 0}
+  m_LocalPosition: {x: -40.9, y: 0.1, z: -10.2}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 931479202}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1316561287
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1316561281}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 339bebe17a87ca94b96606057421a03b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fuerzaExplosion: 200
+  radioExplosion: 2000
+  cooldown: 5
+  distanciaDeChoque: 3
+  sonidoOnda: {fileID: 8300000, guid: 049d487bf2fcc2a4db1d044940faa2ea, type: 3}
+  FORZAR_EXPLOSION: 0
+  distanciaEnTiempoReal: 0
 --- !u!1 &1322640619
 GameObject:
   m_ObjectHideFlags: 0
@@ -7657,6 +7677,7 @@ GameObject:
   - component: {fileID: 2082586454}
   - component: {fileID: 2082586453}
   - component: {fileID: 2082586452}
+  - component: {fileID: 2082586456}
   m_Layer: 0
   m_Name: Player (1)
   m_TagString: Player
@@ -7766,6 +7787,25 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2082586450}
   m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &2082586456
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2082586450}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 339bebe17a87ca94b96606057421a03b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  fuerzaExplosion: 200
+  radioExplosion: 2000
+  cooldown: 5
+  distanciaDeChoque: 3
+  sonidoOnda: {fileID: 8300000, guid: 049d487bf2fcc2a4db1d044940faa2ea, type: 3}
+  FORZAR_EXPLOSION: 0
+  distanciaEnTiempoReal: 0
 --- !u!1 &2092006270
 GameObject:
   m_ObjectHideFlags: 0
