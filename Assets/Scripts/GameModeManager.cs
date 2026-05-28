@@ -67,7 +67,7 @@ public class GameModeManager : MonoBehaviour
     private static readonly Color ColYellow = new Color(1f, 0.85f, 0.10f, 1f);
     private static readonly Color ColOrange = new Color(1f, 0.55f, 0.10f, 1f);
 
-    // ── Referencias UI de resultado (creadas por código) ────────────────────
+    // ── Referencias UI de resultado  ────────────────────
     private GameObject _resultRoot;
     private Image _overlay;
     private Image _panel;
@@ -76,7 +76,14 @@ public class GameModeManager : MonoBehaviour
     private TextMeshProUGUI _scoreTMP;
     private Button _restartBtn;
 
-    // ── Referencias UI de evento (creadas por código) ───────────────────────
+    // ── Referencias UI barra de tiempo ──────────────────────────────────────────
+    private RectTransform _timerFill;
+    private TextMeshProUGUI _timerSeconds;
+    private static readonly Color ColTimerHigh = new Color(0.15f, 0.75f, 0.25f, 1f); // verde
+    private static readonly Color ColTimerMid = new Color(0.95f, 0.80f, 0.10f, 1f); // amarillo
+    private static readonly Color ColTimerLow = new Color(0.85f, 0.15f, 0.10f, 1f); // rojo
+
+    // ── Referencias UI de evento  ───────────────────────
     private GameObject _eventRoot;
     private Image _eventPanel;
     private TextMeshProUGUI _eventIcon;
@@ -111,6 +118,7 @@ public class GameModeManager : MonoBehaviour
 
         BuildResultUI();
         BuildEventUI();
+        BuildTimerUI();
     }
 
     void Update()
@@ -120,15 +128,14 @@ public class GameModeManager : MonoBehaviour
         if (timeRemaining > 0)
         {
             timeRemaining -= Time.deltaTime;
-            if (timerText != null)
-                timerText.text = "Tiempo: " + Mathf.Ceil(timeRemaining).ToString() + "s";
             if (timerBar != null) timerBar.value = timeRemaining;
+            UpdateTimerBar();
         }
         else
         {
             timeRemaining = 0;
-            if (timerText != null) timerText.text = "Tiempo: 0s";
             if (timerBar != null) timerBar.value = 0;
+            UpdateTimerBar();
             LoseGame();
         }
     }
@@ -320,6 +327,147 @@ public class GameModeManager : MonoBehaviour
     // ==========================================
     //          CONSTRUCCIÓN UI — RESULTADO
     // ==========================================
+
+    // ==========================================
+    //          BARRA DE TIEMPO VISUAL
+    // ==========================================
+
+    void BuildTimerUI()
+    {
+        Canvas canvas = FindFirstObjectByType<Canvas>();
+        if (canvas == null) return;
+
+        // Contenedor principal — lateral izquierdo centrado verticalmente
+        var root = new GameObject("TimerBarVisual");
+        root.transform.SetParent(canvas.transform, false);
+        var rootRT = root.AddComponent<RectTransform>();
+        rootRT.anchorMin = new Vector2(0f, 0.5f);
+        rootRT.anchorMax = new Vector2(0f, 0.5f);
+        rootRT.pivot = new Vector2(0f, 0.5f);
+        rootRT.sizeDelta = new Vector2(90f, 500f);
+        rootRT.anchoredPosition = new Vector2(12f, 0f);
+
+        // ── Sombra exterior (madera oscura, da profundidad) ──────────────────
+        var shadow = MakeImage(root, "Shadow", new Color(0.04f, 0.02f, 0.01f, 0.85f));
+        shadow.rectTransform.anchorMin = Vector2.zero;
+        shadow.rectTransform.anchorMax = Vector2.one;
+        shadow.rectTransform.offsetMin = new Vector2(-4f, -4f);
+        shadow.rectTransform.offsetMax = new Vector2(4f, 4f);
+
+        // ── Marco exterior dorado grueso (estilo borde de mesa de billar) ────
+        var frameOuter = MakeImage(root, "FrameOuter", new Color(0.55f, 0.38f, 0.08f, 1f)); // madera dorada
+        StretchFull(frameOuter.rectTransform);
+
+        // ── Relleno interior madera oscura ───────────────────────────────────
+        var frameInner = MakeImage(root, "FrameInner", new Color(0.18f, 0.09f, 0.03f, 1f)); // madera oscura
+        frameInner.rectTransform.anchorMin = Vector2.zero;
+        frameInner.rectTransform.anchorMax = Vector2.one;
+        frameInner.rectTransform.offsetMin = new Vector2(4f, 4f);
+        frameInner.rectTransform.offsetMax = new Vector2(-4f, -4f);
+
+        // ── Zona de la barra (feltro verde oscuro de fondo) ──────────────────
+        var feltBG = MakeImage(root, "FeltBG", new Color(0.05f, 0.18f, 0.07f, 1f));
+        feltBG.rectTransform.anchorMin = new Vector2(0f, 0f);
+        feltBG.rectTransform.anchorMax = new Vector2(1f, 1f);
+        feltBG.rectTransform.offsetMin = new Vector2(8f, 68f);  // 68 = espacio para número abajo
+        feltBG.rectTransform.offsetMax = new Vector2(-8f, -8f);
+
+        // ── Fill (la barra que sube) ──────────────────────────────────────────
+        var fillGO = new GameObject("Fill");
+        fillGO.transform.SetParent(feltBG.rectTransform, false);
+        var fillImg = fillGO.AddComponent<Image>();
+        fillImg.color = ColTimerHigh;
+        _timerFill = fillImg.rectTransform;
+        _timerFill.anchorMin = new Vector2(0f, 0f);
+        _timerFill.anchorMax = new Vector2(1f, 0f);
+        _timerFill.pivot = new Vector2(0.5f, 0f);
+        _timerFill.offsetMin = new Vector2(4f, 4f);
+        _timerFill.offsetMax = new Vector2(-4f, 4f);
+        _timerFill.sizeDelta = new Vector2(-8f, 0f);
+
+        // ── Brillo superior del fill (línea clara que le da volumen) ─────────
+        var shine = MakeImage(fillGO, "Shine", new Color(1f, 1f, 1f, 0.15f));
+        shine.rectTransform.anchorMin = new Vector2(0f, 1f);
+        shine.rectTransform.anchorMax = new Vector2(1f, 1f);
+        shine.rectTransform.pivot = new Vector2(0.5f, 1f);
+        shine.rectTransform.sizeDelta = new Vector2(0f, 3f);
+
+        // ── Marcas doradas cada 25% (como las bandas de la mesa) ─────────────
+        for (int i = 1; i < 4; i++)
+        {
+            var mark = MakeImage(feltBG.gameObject, "Mark" + i, new Color(0.55f, 0.38f, 0.08f, 0.55f));
+            mark.rectTransform.anchorMin = new Vector2(0f, i * 0.25f);
+            mark.rectTransform.anchorMax = new Vector2(1f, i * 0.25f);
+            mark.rectTransform.sizeDelta = new Vector2(0f, 2f);
+            mark.rectTransform.anchoredPosition = Vector2.zero;
+        }
+
+        // ── Separador dorado entre barra y número ────────────────────────────
+        var divider = MakeImage(root, "Divider", new Color(0.55f, 0.38f, 0.08f, 1f));
+        divider.rectTransform.anchorMin = new Vector2(0.1f, 0f);
+        divider.rectTransform.anchorMax = new Vector2(0.9f, 0f);
+        divider.rectTransform.pivot = new Vector2(0.5f, 0f);
+        divider.rectTransform.sizeDelta = new Vector2(0f, 2f);
+        divider.rectTransform.anchoredPosition = new Vector2(0f, 62f);
+
+        // ── Número grande de segundos ─────────────────────────────────────────
+        _timerSeconds = MakeTMP(root, "Seconds", "30", 46, FontStyles.Bold);
+        var secRT = _timerSeconds.rectTransform;
+        secRT.anchorMin = new Vector2(0f, 0f);
+        secRT.anchorMax = new Vector2(1f, 0f);
+        secRT.pivot = new Vector2(0.5f, 0f);
+        secRT.sizeDelta = new Vector2(0f, 60f);
+        secRT.anchoredPosition = new Vector2(0f, 5f);
+        _timerSeconds.alignment = TextAlignmentOptions.Center;
+        _timerSeconds.color = ColGoldLight;
+        _timerSeconds.characterSpacing = 2f;
+
+        // ── Etiqueta "s" pequeña junto al número ─────────────────────────────
+        var labelS = MakeTMP(root, "LabelS", "seg", 14, FontStyles.Italic);
+        var lsRT = labelS.rectTransform;
+        lsRT.anchorMin = new Vector2(0f, 0f);
+        lsRT.anchorMax = new Vector2(1f, 0f);
+        lsRT.pivot = new Vector2(0.5f, 0f);
+        lsRT.sizeDelta = new Vector2(0f, 20f);
+        lsRT.anchoredPosition = new Vector2(0f, 44f);
+        labelS.alignment = TextAlignmentOptions.Center;
+        labelS.color = new Color(0.55f, 0.38f, 0.08f, 1f);
+
+        // Ocultamos TimerText original
+        if (timerText != null) timerText.gameObject.SetActive(false);
+    }
+    void UpdateTimerBar()
+    {
+        if (_timerFill == null) return;
+
+        float ratio = Mathf.Clamp01(timeRemaining / tiempoMaximo);
+
+        // Altura del fill — necesitamos la altura del contenedor BG
+        // El BG ocupa el root menos los offsets (36 abajo para el número, 3 arriba)
+        float bgHeight = _timerFill.parent.GetComponent<RectTransform>().rect.height;
+        if (bgHeight <= 0) bgHeight = 381f; // fallback si rect aún no está calculado
+        float fillHeight = Mathf.Max(4f, (bgHeight - 6f) * ratio);
+        _timerFill.sizeDelta = new Vector2(-6f, fillHeight);
+
+        // Color: verde → amarillo → rojo
+        Color fillColor;
+        if (ratio > 0.6f)
+            fillColor = Color.Lerp(ColTimerMid, ColTimerHigh, (ratio - 0.6f) / 0.4f);
+        else if (ratio > 0.3f)
+            fillColor = Color.Lerp(ColTimerLow, ColTimerMid, (ratio - 0.3f) / 0.3f);
+        else
+            fillColor = Color.Lerp(ColTimerLow, ColTimerLow * 1.1f, Mathf.PingPong(Time.time * 3f, 1f)); // pulso en rojo
+
+        _timerFill.GetComponent<Image>().color = fillColor;
+
+        // Número
+        if (_timerSeconds != null)
+        {
+            int secs = Mathf.CeilToInt(timeRemaining);
+            _timerSeconds.text = secs.ToString();
+            _timerSeconds.color = ratio < 0.3f ? ColTimerLow : ColCream;
+        }
+    }
 
     void BuildResultUI()
     {
