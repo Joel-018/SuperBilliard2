@@ -85,7 +85,7 @@ public class BallMovement : MonoBehaviour
             {
                 if (GameModeManager.Instance.totalBalls > 0)
                 {
-                    GameModeManager.Instance.LoseGame("¡PERDISTE!\nLa Bola 8 cayó antes de tiempo.");
+                    GameModeManager.Instance.LoseGame("8-Ball potted too early!\nTry again!");
                 }
                 else
                 {

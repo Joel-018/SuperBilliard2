@@ -67,14 +67,21 @@ public class GameModeManager : MonoBehaviour
     private static readonly Color ColYellow = new Color(1f, 0.85f, 0.10f, 1f);
     private static readonly Color ColOrange = new Color(1f, 0.55f, 0.10f, 1f);
 
-    // ── Referencias UI de resultado  ────────────────────
-    private GameObject _resultRoot;
-    private Image _overlay;
-    private Image _panel;
-    private TextMeshProUGUI _titleTMP;
-    private TextMeshProUGUI _subtitleTMP;
-    private TextMeshProUGUI _scoreTMP;
-    private Button _restartBtn;
+    //// ── Referencias UI de resultado (DISPLAY 1)  ────────────────────
+    //private GameObject _resultRoot;
+    //private Image _overlay;
+    //private Image _panel;
+    //private TextMeshProUGUI _titleTMP;
+    //private TextMeshProUGUI _subtitleTMP;
+    //private TextMeshProUGUI _scoreTMP;
+
+    // ── Referencias UI de resultado (Multi-Display) ────────────────────
+    private List<GameObject> _resultRoots = new List<GameObject>();
+    private List<Image> _overlays = new List<Image>();
+    private List<Image> _panels = new List<Image>();
+    private List<TextMeshProUGUI> _titleTMPs = new List<TextMeshProUGUI>();
+    private List<TextMeshProUGUI> _subtitleTMPs = new List<TextMeshProUGUI>();
+    private List<TextMeshProUGUI> _scoreTMPs = new List<TextMeshProUGUI>();
 
     // ── Referencias UI barra de tiempo ──────────────────────────────────────────
     private RectTransform _timerFill;
@@ -171,7 +178,8 @@ public class GameModeManager : MonoBehaviour
         gameEnded = true;
         int bolasMetidas = bolasIniciales - totalBalls;
         if (sonidoVictoria != null) altavoz.PlayOneShot(sonidoVictoria);
-        StartCoroutine(ShowResult(true, bolasMetidas));
+        // Le pasamos el mensaje de victoria en inglés
+        StartCoroutine(ShowResult(true, bolasMetidas, "Awesome job, team!"));
     }
 
     public void LoseGame(string mensaje = "")
@@ -179,7 +187,12 @@ public class GameModeManager : MonoBehaviour
         if (gameEnded) return;
         gameEnded = true;
         if (sonidoDerrota != null) altavoz.PlayOneShot(sonidoDerrota);
-        StartCoroutine(ShowResult(false, 0));
+        // Si el mensaje llega vacío, significa que ha sido por tiempo
+        if (string.IsNullOrEmpty(mensaje))
+        {
+            mensaje = "Time's up...\nTry again!";
+        }
+        StartCoroutine(ShowResult(false, 0, mensaje));
     }
 
     // ==========================================
@@ -471,70 +484,113 @@ public class GameModeManager : MonoBehaviour
 
     void BuildResultUI()
     {
-        Canvas canvas = FindFirstObjectByType<Canvas>();
-        if (canvas == null) return;
-        GameObject canvasGO = canvas.gameObject;
+        // Buscamos todos los Canvases de la escena (el original y el duplicado)
+        Canvas[] canvases = FindObjectsOfType<Canvas>();
+        if (canvases.Length == 0) return;
 
-        _resultRoot = new GameObject("ResultScreen");
-        _resultRoot.transform.SetParent(canvasGO.transform, false);
-        var rootRT = _resultRoot.AddComponent<RectTransform>();
-        StretchFull(rootRT);
-        _resultRoot.SetActive(false);
+        foreach (Canvas canvas in canvases)
+        {
+            GameObject canvasGO = canvas.gameObject;
 
-        // Overlay
-        _overlay = MakeImage(_resultRoot, "Overlay", ColDark.WithAlpha(0f));
-        StretchFull(_overlay.rectTransform);
+            var resRoot = new GameObject("ResultScreen");
+            resRoot.transform.SetParent(canvasGO.transform, false);
+            var rootRT = resRoot.AddComponent<RectTransform>();
+            StretchFull(rootRT);
+            resRoot.SetActive(false);
+            _resultRoots.Add(resRoot);
 
-        // Panel central
-        var panelGO = new GameObject("Panel");
-        panelGO.transform.SetParent(_resultRoot.transform, false);
-        _panel = panelGO.AddComponent<Image>();
-        _panel.color = ColDark.WithAlpha(0f);
-        var pr = _panel.rectTransform;
-        pr.anchorMin = pr.anchorMax = pr.pivot = new Vector2(0.5f, 0.5f);
-        pr.sizeDelta = new Vector2(860, 460);
+            // Overlay
+            var over = MakeImage(resRoot, "Overlay", ColDark.WithAlpha(0f));
+            StretchFull(over.rectTransform);
+            _overlays.Add(over);
 
-        // Líneas doradas decorativas
-        MakeHorizontalLine(panelGO, "LineTop", new Vector2(0.1f, 1f), new Vector2(0.9f, 1f), new Vector2(0, -18));
-        MakeHorizontalLine(panelGO, "LineBot", new Vector2(0.1f, 0f), new Vector2(0.9f, 0f), new Vector2(0, 18));
+            // Panel central
+            var panelGO = new GameObject("Panel");
+            panelGO.transform.SetParent(resRoot.transform, false);
+            var pan = panelGO.AddComponent<Image>();
+            pan.color = ColDark.WithAlpha(0f);
+            var pr = pan.rectTransform;
+            pr.anchorMin = pr.anchorMax = pr.pivot = new Vector2(0.5f, 0.5f);
+            pr.sizeDelta = new Vector2(860, 460);
+            _panels.Add(pan);
 
-        // Título
-        _titleTMP = MakeTMP(panelGO, "Title", "", 94, FontStyles.Bold);
-        AnchorRect(_titleTMP.rectTransform, 0f, 0.55f, 1f, 0.95f);
-        _titleTMP.alignment = TextAlignmentOptions.Center;
-        _titleTMP.characterSpacing = 16f;
-        _titleTMP.color = ColGoldLight.WithAlpha(0f);
+            // Líneas doradas decorativas
+            MakeHorizontalLine(panelGO, "LineTop", new Vector2(0.1f, 1f), new Vector2(0.9f, 1f), new Vector2(0, -18));
+            MakeHorizontalLine(panelGO, "LineBot", new Vector2(0.1f, 0f), new Vector2(0.9f, 0f), new Vector2(0, 18));
 
-        // Subtítulo
-        _subtitleTMP = MakeTMP(panelGO, "Subtitle", "", 30, FontStyles.Italic);
-        AnchorRect(_subtitleTMP.rectTransform, 0.05f, 0.32f, 0.95f, 0.56f);
-        _subtitleTMP.alignment = TextAlignmentOptions.Center;
-        _subtitleTMP.color = ColCream.WithAlpha(0f);
+            // Título
+            var tit = MakeTMP(panelGO, "Title", "", 94, FontStyles.Bold);
+            AnchorRect(tit.rectTransform, 0f, 0.55f, 1f, 0.95f);
+            tit.alignment = TextAlignmentOptions.Center;
+            tit.characterSpacing = 16f;
+            tit.color = ColGoldLight.WithAlpha(0f);
+            _titleTMPs.Add(tit);
 
-        // Score
-        _scoreTMP = MakeTMP(panelGO, "Score", "", 24, FontStyles.Normal);
-        AnchorRect(_scoreTMP.rectTransform, 0.1f, 0.18f, 0.9f, 0.34f);
-        _scoreTMP.alignment = TextAlignmentOptions.Center;
-        _scoreTMP.color = ColGold.WithAlpha(0f);
+            // Subtítulo
+            var sub = MakeTMP(panelGO, "Subtitle", "", 30, FontStyles.Italic);
+            AnchorRect(sub.rectTransform, 0.05f, 0.32f, 0.95f, 0.56f);
+            sub.alignment = TextAlignmentOptions.Center;
+            sub.color = ColCream.WithAlpha(0f);
+            _subtitleTMPs.Add(sub);
 
-        // Botón reiniciar
-        var btnGO = new GameObject("RestartBtn");
-        btnGO.transform.SetParent(panelGO.transform, false);
-        var btnImg = btnGO.AddComponent<Image>();
-        btnImg.color = ColGold.WithAlpha(0f);
-        AnchorRect(btnImg.rectTransform, 0.28f, 0.03f, 0.72f, 0.17f);
-        _restartBtn = btnGO.AddComponent<Button>();
-        _restartBtn.targetGraphic = btnImg;
-        var nav = Navigation.defaultNavigation; nav.mode = Navigation.Mode.None;
-        _restartBtn.navigation = nav;
-        _restartBtn.onClick.AddListener(() => SceneManager.LoadScene(SceneManager.GetActiveScene().name));
-        var btnLabel = MakeTMP(btnGO, "Label", "JUGAR DE NUEVO", 22, FontStyles.Bold);
-        StretchFull(btnLabel.rectTransform);
-        btnLabel.alignment = TextAlignmentOptions.Center;
-        btnLabel.color = ColDark;
-        btnGO.SetActive(false);
-        _restartBtn = _restartBtn; // guardamos ref via btnGO
+            // Score
+            var sco = MakeTMP(panelGO, "Score", "", 24, FontStyles.Normal);
+            AnchorRect(sco.rectTransform, 0.1f, 0.18f, 0.9f, 0.34f);
+            sco.alignment = TextAlignmentOptions.Center;
+            sco.color = ColGold.WithAlpha(0f);
+            _scoreTMPs.Add(sco);
+        }
     }
+
+    //void BuildResultUI()
+    //{
+    //    Canvas canvas = FindFirstObjectByType<Canvas>();
+    //    if (canvas == null) return;
+    //    GameObject canvasGO = canvas.gameObject;
+
+    //    _resultRoot = new GameObject("ResultScreen");
+    //    _resultRoot.transform.SetParent(canvasGO.transform, false);
+    //    var rootRT = _resultRoot.AddComponent<RectTransform>();
+    //    StretchFull(rootRT);
+    //    _resultRoot.SetActive(false);
+
+    //    // Overlay
+    //    _overlay = MakeImage(_resultRoot, "Overlay", ColDark.WithAlpha(0f));
+    //    StretchFull(_overlay.rectTransform);
+
+    //    // Panel central
+    //    var panelGO = new GameObject("Panel");
+    //    panelGO.transform.SetParent(_resultRoot.transform, false);
+    //    _panel = panelGO.AddComponent<Image>();
+    //    _panel.color = ColDark.WithAlpha(0f);
+    //    var pr = _panel.rectTransform;
+    //    pr.anchorMin = pr.anchorMax = pr.pivot = new Vector2(0.5f, 0.5f);
+    //    pr.sizeDelta = new Vector2(860, 460);
+
+    //    // Líneas doradas decorativas
+    //    MakeHorizontalLine(panelGO, "LineTop", new Vector2(0.1f, 1f), new Vector2(0.9f, 1f), new Vector2(0, -18));
+    //    MakeHorizontalLine(panelGO, "LineBot", new Vector2(0.1f, 0f), new Vector2(0.9f, 0f), new Vector2(0, 18));
+
+    //    // Título
+    //    _titleTMP = MakeTMP(panelGO, "Title", "", 94, FontStyles.Bold);
+    //    AnchorRect(_titleTMP.rectTransform, 0f, 0.55f, 1f, 0.95f);
+    //    _titleTMP.alignment = TextAlignmentOptions.Center;
+    //    _titleTMP.characterSpacing = 16f;
+    //    _titleTMP.color = ColGoldLight.WithAlpha(0f);
+
+    //    // Subtítulo
+    //    _subtitleTMP = MakeTMP(panelGO, "Subtitle", "", 30, FontStyles.Italic);
+    //    AnchorRect(_subtitleTMP.rectTransform, 0.05f, 0.32f, 0.95f, 0.56f);
+    //    _subtitleTMP.alignment = TextAlignmentOptions.Center;
+    //    _subtitleTMP.color = ColCream.WithAlpha(0f);
+
+    //    // Score
+    //    _scoreTMP = MakeTMP(panelGO, "Score", "", 24, FontStyles.Normal);
+    //    AnchorRect(_scoreTMP.rectTransform, 0.1f, 0.18f, 0.9f, 0.34f);
+    //    _scoreTMP.alignment = TextAlignmentOptions.Center;
+    //    _scoreTMP.color = ColGold.WithAlpha(0f);
+    //}
+
 
     // ==========================================
     //          CONSTRUCCIÓN UI — EVENTO
@@ -590,49 +646,95 @@ public class GameModeManager : MonoBehaviour
     //          ANIMACIONES DE RESULTADO
     // ==========================================
 
-    IEnumerator ShowResult(bool won, int balls)
+    IEnumerator ShowResult(bool won, int balls, string mensajeSubtitulo)
     {
-        _resultRoot.SetActive(true);
-
-        // Configurar textos
-        if (won)
+        // Encendemos y configuramos los textos en todos los proyectores a la vez
+        for (int i = 0; i < _resultRoots.Count; i++)
         {
-            _titleTMP.text = "VICTORIA";
-            _subtitleTMP.text = "¡Lo habéis conseguido, equipo!";
-            _panel.color = ColGreen.WithAlpha(0.96f);
+            _resultRoots[i].SetActive(true);
+
+            if (won)
+            {
+                _titleTMPs[i].text = "VICTORY";
+                _subtitleTMPs[i].text = mensajeSubtitulo;
+                _panels[i].color = ColGreen.WithAlpha(0.96f);
+            }
+            else
+            {
+                _titleTMPs[i].text = "DEFEAT";
+                _subtitleTMPs[i].text = mensajeSubtitulo;
+                _panels[i].color = ColRed.WithAlpha(0.96f);
+            }
+            _scoreTMPs[i].text = balls > 0 ? $"Balls potted: {balls}" : "";
+
+            // Disparamos las animaciones
+            StartCoroutine(FadeGraphic(_overlays[i], 0f, 0.78f, 0.35f));
+
+            _panels[i].rectTransform.localScale = Vector3.one * 0.72f;
+            _panels[i].color = _panels[i].color.WithAlpha(0f);
+
+            StartCoroutine(FadeGraphic(_panels[i], 0f, 0.96f, 0.4f));
+            StartCoroutine(ScaleTo(_panels[i].rectTransform, 0.72f, 1f, 0.4f));
+
+            StartCoroutine(FadeTMP(_titleTMPs[i], 0f, 1f, 0.45f, 22f));
+            StartCoroutine(FadeTMP(_subtitleTMPs[i], 0f, 1f, 0.35f));
+
+            if (_scoreTMPs[i].text.Length > 0)
+                StartCoroutine(FadeTMP(_scoreTMPs[i], 0f, 1f, 0.3f));
+
+            StartCoroutine(PulseTMP(_titleTMPs[i]));
         }
-        else
-        {
-            _titleTMP.text = "DERROTA";
-            _subtitleTMP.text = "El tiempo se agotó...\n¡Intentadlo de nuevo!";
-            _panel.color = ColRed.WithAlpha(0.96f);
-        }
-        _scoreTMP.text = balls > 0 ? $"Bolas embocadas: {balls}" : "";
 
-        // Animar
-        yield return FadeGraphic(_overlay, 0f, 0.78f, 0.35f);
+        // Esperamos a que terminen las animaciones y pasen los 5 segundos extra
+        yield return new WaitForSecondsRealtime(2.2f);
+        yield return new WaitForSecondsRealtime(7f);
 
-        _panel.rectTransform.localScale = Vector3.one * 0.72f;
-        _panel.color = _panel.color.WithAlpha(0f);
-        yield return Parallel(
-            FadeGraphic(_panel, 0f, 0.96f, 0.4f),
-            ScaleTo(_panel.rectTransform, 0.72f, 1f, 0.4f)
-        );
-
-        yield return FadeTMP(_titleTMP, 0f, 1f, 0.45f, 22f);
-        yield return FadeTMP(_subtitleTMP, 0f, 1f, 0.35f);
-        if (_scoreTMP.text.Length > 0)
-            yield return FadeTMP(_scoreTMP, 0f, 1f, 0.3f);
-
-        StartCoroutine(PulseTMP(_titleTMP));
-
-        yield return new WaitForSeconds(2.2f);
-
-        // Mostrar botón
-        var btnGO = _restartBtn.gameObject;
-        btnGO.SetActive(true);
-        yield return FadeGraphic(btnGO.GetComponent<Image>(), 0f, 1f, 0.4f);
+        SceneManager.LoadScene("StartScene");
     }
+
+    //IEnumerator ShowResult(bool won, int balls, string mensajeSubtitulo)
+    //{
+    //    _resultRoot.SetActive(true);
+
+    //    // Configurar textos
+    //    if (won)
+    //    {
+    //        _titleTMP.text = "VICTORY";
+    //        _subtitleTMP.text = mensajeSubtitulo;
+    //        _panel.color = ColGreen.WithAlpha(0.96f);
+    //    }
+    //    else
+    //    {
+    //        _titleTMP.text = "DEFEAT";
+    //        _subtitleTMP.text = mensajeSubtitulo;
+    //        _panel.color = ColRed.WithAlpha(0.96f);
+    //    }
+    //    _scoreTMP.text = balls > 0 ? $"Balls potted: {balls}" : "";
+
+    //    // Animar
+    //    yield return FadeGraphic(_overlay, 0f, 0.78f, 0.35f);
+
+    //    _panel.rectTransform.localScale = Vector3.one * 0.72f;
+    //    _panel.color = _panel.color.WithAlpha(0f);
+    //    yield return Parallel(
+    //        FadeGraphic(_panel, 0f, 0.96f, 0.4f),
+    //        ScaleTo(_panel.rectTransform, 0.72f, 1f, 0.4f)
+    //    );
+
+    //    yield return FadeTMP(_titleTMP, 0f, 1f, 0.45f, 22f);
+    //    yield return FadeTMP(_subtitleTMP, 0f, 1f, 0.35f);
+    //    if (_scoreTMP.text.Length > 0)
+    //        yield return FadeTMP(_scoreTMP, 0f, 1f, 0.3f);
+
+    //    StartCoroutine(PulseTMP(_titleTMP));
+
+    //    yield return new WaitForSeconds(2.2f);
+
+    //    // Esperamos 5 segundos y cambiamos de escena
+    //    yield return new WaitForSeconds(5f);
+    //    SceneManager.LoadScene("StartScene");
+    //}
+
 
     IEnumerator PulseTMP(TextMeshProUGUI tmp)
     {
