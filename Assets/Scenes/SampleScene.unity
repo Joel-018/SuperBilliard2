@@ -1943,7 +1943,7 @@ Transform:
   m_GameObject: {fileID: 476905963}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 143, y: -535, z: 130}
+  m_LocalPosition: {x: 143, y: -525, z: 130}
   m_LocalScale: {x: 1000, y: 1000, z: 1000}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2064,7 +2064,7 @@ Transform:
   m_GameObject: {fileID: 479695855}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -41, y: -1.50012, z: 562}
+  m_LocalPosition: {x: -41, y: -1.50012, z: 550}
   m_LocalScale: {x: 1000, y: 1000, z: 1000}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3089,7 +3089,7 @@ Transform:
   m_GameObject: {fileID: 772061889}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -556, y: -1.50012, z: -50}
+  m_LocalPosition: {x: -550, y: -1.50012, z: -50}
   m_LocalScale: {x: 1000, y: 1000, z: 1000}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4714,7 +4714,7 @@ MonoBehaviour:
   fuerzaExplosion: 200
   radioExplosion: 2000
   cooldown: 5
-  distanciaDeChoque: 1
+  distanciaDeChoque: 3
   sonidoOnda: {fileID: 8300000, guid: 049d487bf2fcc2a4db1d044940faa2ea, type: 3}
   FORZAR_EXPLOSION: 0
   distanciaEnTiempoReal: 0
@@ -5812,7 +5812,7 @@ Transform:
   m_GameObject: {fileID: 1579983190}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 6, y: -1.50012, z: -655}
+  m_LocalPosition: {x: 6, y: -1.50012, z: -550}
   m_LocalScale: {x: 1000, y: 1000, z: 1000}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -6656,7 +6656,7 @@ Transform:
   m_GameObject: {fileID: 1744602943}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 627, y: -1.50012, z: 29}
+  m_LocalPosition: {x: 550, y: -1.50012, z: 29}
   m_LocalScale: {x: 1000, y: 1000, z: 1000}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8286,7 +8286,7 @@ MonoBehaviour:
   fuerzaExplosion: 200
   radioExplosion: 2000
   cooldown: 5
-  distanciaDeChoque: 1.5
+  distanciaDeChoque: 3
   sonidoOnda: {fileID: 8300000, guid: 049d487bf2fcc2a4db1d044940faa2ea, type: 3}
   FORZAR_EXPLOSION: 0
   distanciaEnTiempoReal: 0
