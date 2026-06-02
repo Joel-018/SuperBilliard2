@@ -247,7 +247,7 @@ public class GameModeManager : MonoBehaviour
 
     private IEnumerator EventoTornado()
     {
-        StartCoroutine(MostrarMensajeEvento("🌪", "¡TORNADO SALVAJE!", "Las bolas enloquecen durante " + duracionTornado + " segundos", ColOrange));
+        StartCoroutine(MostrarMensajeEvento("🌪", "GIGANTIC TORNADO!!", "Everything is chaotic for " + duracionTornado + " seconds", ColOrange));
         if (sonidoTornado != null) altavoz.PlayOneShot(sonidoTornado);
 
         GameObject[] agujeros = GameObject.FindGameObjectsWithTag("Hole");
@@ -287,7 +287,7 @@ public class GameModeManager : MonoBehaviour
 
     private IEnumerator EventoVillano()
     {
-        StartCoroutine(MostrarMensajeEvento("😈", "¡EL VILLANO HACE TRAMPAS!", "Añade 3 bolas nuevas a la mesa", ColRed));
+        StartCoroutine(MostrarMensajeEvento("😈", "THE VILLIAN HAS APPEARED!!", "It hads 3 more balls to the table", ColRed));
         if (sonidoVillano != null) altavoz.PlayOneShot(sonidoVillano);
 
         if (manoVillanoPrefab != null && centroDelTablero != null)
@@ -317,7 +317,7 @@ public class GameModeManager : MonoBehaviour
 
     private void EventoGravedad()
     {
-        StartCoroutine(MostrarMensajeEvento("⬇", "¡GRAVEDAD EXTREMA!", "Las bolas ahora pesan 5 veces más", ColYellow));
+        StartCoroutine(MostrarMensajeEvento("⬇", "EXTREM GRAVITY!!", "Now teh balls wight 5 times more", ColYellow));
         if (sonidoGravedad != null) altavoz.PlayOneShot(sonidoGravedad);
 
         GameObject[] todasLasBolas = GameObject.FindGameObjectsWithTag("Ball");
@@ -542,56 +542,6 @@ public class GameModeManager : MonoBehaviour
         }
     }
 
-    //void BuildResultUI()
-    //{
-    //    Canvas canvas = FindFirstObjectByType<Canvas>();
-    //    if (canvas == null) return;
-    //    GameObject canvasGO = canvas.gameObject;
-
-    //    _resultRoot = new GameObject("ResultScreen");
-    //    _resultRoot.transform.SetParent(canvasGO.transform, false);
-    //    var rootRT = _resultRoot.AddComponent<RectTransform>();
-    //    StretchFull(rootRT);
-    //    _resultRoot.SetActive(false);
-
-    //    // Overlay
-    //    _overlay = MakeImage(_resultRoot, "Overlay", ColDark.WithAlpha(0f));
-    //    StretchFull(_overlay.rectTransform);
-
-    //    // Panel central
-    //    var panelGO = new GameObject("Panel");
-    //    panelGO.transform.SetParent(_resultRoot.transform, false);
-    //    _panel = panelGO.AddComponent<Image>();
-    //    _panel.color = ColDark.WithAlpha(0f);
-    //    var pr = _panel.rectTransform;
-    //    pr.anchorMin = pr.anchorMax = pr.pivot = new Vector2(0.5f, 0.5f);
-    //    pr.sizeDelta = new Vector2(860, 460);
-
-    //    // Líneas doradas decorativas
-    //    MakeHorizontalLine(panelGO, "LineTop", new Vector2(0.1f, 1f), new Vector2(0.9f, 1f), new Vector2(0, -18));
-    //    MakeHorizontalLine(panelGO, "LineBot", new Vector2(0.1f, 0f), new Vector2(0.9f, 0f), new Vector2(0, 18));
-
-    //    // Título
-    //    _titleTMP = MakeTMP(panelGO, "Title", "", 94, FontStyles.Bold);
-    //    AnchorRect(_titleTMP.rectTransform, 0f, 0.55f, 1f, 0.95f);
-    //    _titleTMP.alignment = TextAlignmentOptions.Center;
-    //    _titleTMP.characterSpacing = 16f;
-    //    _titleTMP.color = ColGoldLight.WithAlpha(0f);
-
-    //    // Subtítulo
-    //    _subtitleTMP = MakeTMP(panelGO, "Subtitle", "", 30, FontStyles.Italic);
-    //    AnchorRect(_subtitleTMP.rectTransform, 0.05f, 0.32f, 0.95f, 0.56f);
-    //    _subtitleTMP.alignment = TextAlignmentOptions.Center;
-    //    _subtitleTMP.color = ColCream.WithAlpha(0f);
-
-    //    // Score
-    //    _scoreTMP = MakeTMP(panelGO, "Score", "", 24, FontStyles.Normal);
-    //    AnchorRect(_scoreTMP.rectTransform, 0.1f, 0.18f, 0.9f, 0.34f);
-    //    _scoreTMP.alignment = TextAlignmentOptions.Center;
-    //    _scoreTMP.color = ColGold.WithAlpha(0f);
-    //}
-
-
     // ==========================================
     //          CONSTRUCCIÓN UI — EVENTO
     // ==========================================
@@ -609,6 +559,8 @@ public class GameModeManager : MonoBehaviour
         rt.pivot = new Vector2(0.5f, 1f);
         rt.sizeDelta = new Vector2(680, 130);
         rt.anchoredPosition = new Vector2(0, -20);
+
+        rt.localScale = new Vector3(1.5f, 1.5f, 1f);
 
         _eventPanel = _eventRoot.AddComponent<Image>();
         _eventPanel.color = ColDark.WithAlpha(0f);
@@ -691,50 +643,6 @@ public class GameModeManager : MonoBehaviour
 
         SceneManager.LoadScene("StartScene");
     }
-
-    //IEnumerator ShowResult(bool won, int balls, string mensajeSubtitulo)
-    //{
-    //    _resultRoot.SetActive(true);
-
-    //    // Configurar textos
-    //    if (won)
-    //    {
-    //        _titleTMP.text = "VICTORY";
-    //        _subtitleTMP.text = mensajeSubtitulo;
-    //        _panel.color = ColGreen.WithAlpha(0.96f);
-    //    }
-    //    else
-    //    {
-    //        _titleTMP.text = "DEFEAT";
-    //        _subtitleTMP.text = mensajeSubtitulo;
-    //        _panel.color = ColRed.WithAlpha(0.96f);
-    //    }
-    //    _scoreTMP.text = balls > 0 ? $"Balls potted: {balls}" : "";
-
-    //    // Animar
-    //    yield return FadeGraphic(_overlay, 0f, 0.78f, 0.35f);
-
-    //    _panel.rectTransform.localScale = Vector3.one * 0.72f;
-    //    _panel.color = _panel.color.WithAlpha(0f);
-    //    yield return Parallel(
-    //        FadeGraphic(_panel, 0f, 0.96f, 0.4f),
-    //        ScaleTo(_panel.rectTransform, 0.72f, 1f, 0.4f)
-    //    );
-
-    //    yield return FadeTMP(_titleTMP, 0f, 1f, 0.45f, 22f);
-    //    yield return FadeTMP(_subtitleTMP, 0f, 1f, 0.35f);
-    //    if (_scoreTMP.text.Length > 0)
-    //        yield return FadeTMP(_scoreTMP, 0f, 1f, 0.3f);
-
-    //    StartCoroutine(PulseTMP(_titleTMP));
-
-    //    yield return new WaitForSeconds(2.2f);
-
-    //    // Esperamos 5 segundos y cambiamos de escena
-    //    yield return new WaitForSeconds(5f);
-    //    SceneManager.LoadScene("StartScene");
-    //}
-
 
     IEnumerator PulseTMP(TextMeshProUGUI tmp)
     {
