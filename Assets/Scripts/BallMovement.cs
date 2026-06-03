@@ -34,11 +34,6 @@ public class BallMovement : MonoBehaviour
         altavoz = GetComponent<AudioSource>();
         startScale = transform.localScale.x;
         miCollider = GetComponent<Collider>();
-
-        if (gameObject.CompareTag("Ball8"))
-        {
-            IgnorarColisionConJugadores(true); 
-        }
     }
 
     void OnCollisionEnter(Collision colision)
@@ -119,24 +114,5 @@ public class BallMovement : MonoBehaviour
             }
         }
         Destroy(gameObject);
-    }
-
-    public void HacerSolidaParaJugador()
-    {
-        IgnorarColisionConJugadores(false); 
-        Debug.Log("¡Última bola! La Bola 8 ya es vulnerable al jugador.");
-    }
-
-    private void IgnorarColisionConJugadores(bool ignorar)
-    {
-        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        foreach (GameObject p in players)
-        {
-            Collider colPlayer = p.GetComponent<Collider>();
-            if (colPlayer != null)
-            {
-                Physics.IgnoreCollision(miCollider, colPlayer, ignorar);
-            }
-        }
     }
 }

@@ -138,6 +138,7 @@ public class BallMovComp : MonoBehaviour
 
         // Borramos la memoria
         ultimoJugador = "";
+        ActualizarEstela();
         Debug.Log($"La bola {gameObject.name} ya no es de nadie (han pasado 5s).");
     }
 

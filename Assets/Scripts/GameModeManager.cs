@@ -22,6 +22,7 @@ public class GameModeManager : MonoBehaviour
     public int totalBalls;
     private bool gameEnded = false;
     private float tiempoMaximo;
+    public float tiempoRecompensa = 10f;
 
     [Header("Pruebas y Debug")]
     [Tooltip("Elige qué evento saldrá. Déjalo en 'Aleatorio' para jugar una partida normal.")]
@@ -38,6 +39,9 @@ public class GameModeManager : MonoBehaviour
     public float fuerzaDelTornado = 30f;
     public float duracionTornado = 5f;
     public float separacionBolasVillano = 3f;
+    public int bolasVillano = 3;
+    public float multiplicadorGravedad = 5f;
+    public float duracionGravedad = 8f;
 
     [Header("Audios de Eventos")]
     public AudioClip sonidoTornado;
@@ -66,14 +70,6 @@ public class GameModeManager : MonoBehaviour
     private static readonly Color ColCream = new Color(0.95f, 0.92f, 0.82f, 1f);
     private static readonly Color ColYellow = new Color(1f, 0.85f, 0.10f, 1f);
     private static readonly Color ColOrange = new Color(1f, 0.55f, 0.10f, 1f);
-
-    //// ── Referencias UI de resultado (DISPLAY 1)  ────────────────────
-    //private GameObject _resultRoot;
-    //private Image _overlay;
-    //private Image _panel;
-    //private TextMeshProUGUI _titleTMP;
-    //private TextMeshProUGUI _subtitleTMP;
-    //private TextMeshProUGUI _scoreTMP;
 
     // ── Referencias UI de resultado (Multi-Display) ────────────────────
     private List<GameObject> _resultRoots = new List<GameObject>();
@@ -151,7 +147,7 @@ public class GameModeManager : MonoBehaviour
     {
         if (gameEnded) return;
 
-        timeRemaining += 10f;
+        timeRemaining += tiempoRecompensa;
         if (timeRemaining > tiempoMaximo) timeRemaining = tiempoMaximo;
 
         totalBalls--;
@@ -159,13 +155,6 @@ public class GameModeManager : MonoBehaviour
         int bolasMetidas = bolasIniciales - totalBalls;
         if (!eventoYaLanzado && bolasMetidas >= (bolasIniciales / 2))
             LanzarEventoAleatorio();
-
-        if (totalBalls <= 0)
-        {
-            GameObject bola8 = GameObject.FindGameObjectWithTag("Ball8");
-            if (bola8 != null)
-                bola8.GetComponent<BallMovement>().HacerSolidaParaJugador();
-        }
     }
 
     // ==========================================
@@ -210,7 +199,7 @@ public class GameModeManager : MonoBehaviour
         {
             case 0: StartCoroutine(EventoTornado()); break;
             case 1: StartCoroutine(EventoVillano()); break;
-            case 2: EventoGravedad(); break;
+            case 2: StartCoroutine(EventoGravedad()); break;
         }
     }
 
@@ -300,26 +289,26 @@ public class GameModeManager : MonoBehaviour
 
         if (prefabsDeBolas != null && prefabsDeBolas.Length > 0 && centroDelTablero != null)
         {
-            float dist = separacionBolasVillano;
-            Vector3[] pos = new Vector3[3] {
-                new Vector3(0, 0, dist),
-                new Vector3(-dist, 0, -dist),
-                new Vector3(dist, 0, -dist)
-            };
-            for (int i = 0; i < 3; i++)
+            // Creamos exactamente el número de bolas que hayas puesto en el Inspector
+            for (int i = 0; i < bolasVillano; i++)
             {
+                // Calcula un punto aleatorio alrededor del centro
+                Vector2 posAleatoria = Random.insideUnitCircle * separacionBolasVillano;
+                Vector3 spawnPos = centroDelTablero.position + new Vector3(posAleatoria.x, 0, posAleatoria.y);
+
                 int idx = Random.Range(0, prefabsDeBolas.Length);
-                Instantiate(prefabsDeBolas[idx], centroDelTablero.position + pos[i], Quaternion.identity);
+                Instantiate(prefabsDeBolas[idx], spawnPos, Quaternion.identity);
                 totalBalls++;
             }
         }
     }
 
-    private void EventoGravedad()
+    private IEnumerator EventoGravedad()
     {
         StartCoroutine(MostrarMensajeEvento("⬇", "EXTREM GRAVITY!!", "Now teh balls wight 5 times more", ColYellow));
         if (sonidoGravedad != null) altavoz.PlayOneShot(sonidoGravedad);
 
+        // 1. APLICAR GRAVEDAD EXTREMA
         GameObject[] todasLasBolas = GameObject.FindGameObjectsWithTag("Ball");
         GameObject bola8 = GameObject.FindGameObjectWithTag("Ball8");
         List<GameObject> bolasEnMesa = new List<GameObject>(todasLasBolas);
@@ -330,12 +319,36 @@ public class GameModeManager : MonoBehaviour
             Rigidbody rb = bola.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                rb.mass *= 5f;
+                rb.mass *= multiplicadorGravedad;
                 rb.linearDamping *= 3f;
                 rb.angularDamping *= 3f;
             }
         }
+
+        // 2. ESPERAR LOS 8 SEGUNDOS
+        yield return new WaitForSeconds(duracionGravedad);
+
+        // 3. VOLVER A LA NORMALIDAD (Operación inversa)
+        // Volvemos a buscar las bolas por si alguna ha desaparecido en Muerte Súbita
+        GameObject[] bolasFin = GameObject.FindGameObjectsWithTag("Ball");
+        GameObject bola8Fin = GameObject.FindGameObjectWithTag("Ball8");
+        List<GameObject> mesaFin = new List<GameObject>(bolasFin);
+        if (bola8Fin != null) mesaFin.Add(bola8Fin);
+
+        foreach (GameObject bola in mesaFin)
+        {
+            Rigidbody rb = bola.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.mass /= multiplicadorGravedad;
+                rb.linearDamping /= 3f;
+                rb.angularDamping /= 3f;
+            }
+        }
+
+        Debug.Log("¡La gravedad ha vuelto a la normalidad!");
     }
+
 
     // ==========================================
     //          CONSTRUCCIÓN UI — RESULTADO

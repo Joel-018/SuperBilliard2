@@ -39,6 +39,9 @@ public class GMManagerComp : MonoBehaviour
     public float fuerzaDelTornado = 30f;
     public float duracionTornado = 5f;
     public float separacionBolasVillano = 3f;
+    public int bolasVillano = 3;
+    public float multiplicadorGravedad = 5f;
+    public float duracionGravedad = 8f;
 
     [Header("Audios de Eventos")]
     public AudioClip sonidoTornado;
@@ -194,19 +197,18 @@ public class GMManagerComp : MonoBehaviour
         {
             totalBalls--;
 
+            // Control de eventos normales en mitad de partida
+            int bolasMetidas = bolasIniciales - totalBalls;
+            if (!eventoYaLanzado && bolasMetidas >= (bolasIniciales / 2))
+                LanzarEventoAleatorio();
+
             // Si ya no quedan más bolas en la mesa, evaluamos el final por puntos
             if (totalBalls <= 0)
             {
                 TerminarPartidaPorPuntos();
             }
         }
-        else
-        {
-            // Control de eventos normales en mitad de partida
-            int bolasMetidas = bolasIniciales - totalBalls;
-            if (!eventoYaLanzado && bolasMetidas >= (bolasIniciales / 2))
-                LanzarEventoAleatorio();
-        }
+        
         ActualizarMarcadoresUI();
     }
 
@@ -257,7 +259,7 @@ public class GMManagerComp : MonoBehaviour
         {
             case 0: StartCoroutine(EventoTornado()); break;
             case 1: StartCoroutine(EventoVillano()); break;
-            case 2: EventoGravedad(); break;
+            case 2: StartCoroutine(EventoGravedad()); break;
         }
     }
 
@@ -347,26 +349,24 @@ public class GMManagerComp : MonoBehaviour
 
         if (prefabsDeBolas != null && prefabsDeBolas.Length > 0 && centroDelTablero != null)
         {
-            float dist = separacionBolasVillano;
-            Vector3[] pos = new Vector3[3] {
-                new Vector3(0, 0, dist),
-                new Vector3(-dist, 0, -dist),
-                new Vector3(dist, 0, -dist)
-            };
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < bolasVillano; i++)
             {
+                Vector2 posAleatoria = Random.insideUnitCircle * separacionBolasVillano;
+                Vector3 spawnPos = centroDelTablero.position + new Vector3(posAleatoria.x, 0, posAleatoria.y);
+
                 int idx = Random.Range(0, prefabsDeBolas.Length);
-                Instantiate(prefabsDeBolas[idx], centroDelTablero.position + pos[i], Quaternion.identity);
+                Instantiate(prefabsDeBolas[idx], spawnPos, Quaternion.identity);
                 totalBalls++;
             }
         }
     }
 
-    private void EventoGravedad()
+    private IEnumerator EventoGravedad()
     {
         StartCoroutine(MostrarMensajeEvento("⬇", "EXTREM GRAVITY!!", "Now teh balls wight 5 times more", ColYellow));
         if (sonidoGravedad != null) altavoz.PlayOneShot(sonidoGravedad);
 
+        // 1. APLICAR GRAVEDAD EXTREMA
         GameObject[] todasLasBolas = GameObject.FindGameObjectsWithTag("Ball");
         GameObject bola8 = GameObject.FindGameObjectWithTag("Ball8");
         List<GameObject> bolasEnMesa = new List<GameObject>(todasLasBolas);
@@ -377,9 +377,29 @@ public class GMManagerComp : MonoBehaviour
             Rigidbody rb = bola.GetComponent<Rigidbody>();
             if (rb != null)
             {
-                rb.mass *= 5f;
+                rb.mass *= multiplicadorGravedad;
                 rb.linearDamping *= 3f;
                 rb.angularDamping *= 3f;
+            }
+        }
+
+        // 2. ESPERAR EL TIEMPO CONFIGURADO
+        yield return new WaitForSeconds(duracionGravedad);
+
+        // 3. VOLVER A LA NORMALIDAD
+        GameObject[] bolasFin = GameObject.FindGameObjectsWithTag("Ball");
+        GameObject bola8Fin = GameObject.FindGameObjectWithTag("Ball8");
+        List<GameObject> mesaFin = new List<GameObject>(bolasFin);
+        if (bola8Fin != null) mesaFin.Add(bola8Fin);
+
+        foreach (GameObject bola in mesaFin)
+        {
+            Rigidbody rb = bola.GetComponent<Rigidbody>();
+            if (rb != null)
+            {
+                rb.mass /= multiplicadorGravedad;
+                rb.linearDamping /= 3f;
+                rb.angularDamping /= 3f;
             }
         }
     }
@@ -607,7 +627,7 @@ public class GMManagerComp : MonoBehaviour
             var t1 = MakeTMP(root, "ScoreP1", "P1: 0", 34, FontStyles.Bold);
             AnchorRect(t1.rectTransform, 0f, 0f, 0.45f, 1f);
             t1.alignment = TextAlignmentOptions.Center;
-            t1.color = new Color(0.9f, 0.2f, 0.2f, 1f);
+            t1.color = new Color(0.2f, 1.0f, 0.9f, 1f);
             _textosP1.Add(t1);
 
             // Separador (Centro)
@@ -620,7 +640,7 @@ public class GMManagerComp : MonoBehaviour
             var t2 = MakeTMP(root, "ScoreP2", "P2: 0", 34, FontStyles.Bold);
             AnchorRect(t2.rectTransform, 0.55f, 0f, 1f, 1f);
             t2.alignment = TextAlignmentOptions.Center;
-            t2.color = new Color(0.2f, 0.5f, 0.9f, 1f);
+            t2.color = new Color(1.0f, 0.0f, 1.0f, 1f);
             _textosP2.Add(t2);
         }
     }
