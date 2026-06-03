@@ -171,7 +171,7 @@ MonoBehaviour:
   uiCoop: {fileID: 1347353318}
   uiComp: {fileID: 744688717}
   escenaCoop: SampleScene
-  escenaComp: SampleScene
+  escenaComp: Competitivo
   bolasVisuales:
   - {fileID: 711391619}
   - {fileID: 617264504}

@@ -1,37 +1,45 @@
 using UnityEngine;
 
-public class RecuperadorDeBolas : MonoBehaviour
+public class RecuperadorDeBolasComp : MonoBehaviour
 {
+    // Creamos el canal (Instance) para que BallMovementComp pueda llamarlo
+    public static RecuperadorDeBolasComp Instance;
+
+    [Tooltip("Arrastra aquí los 3 puntos de respawn")]
+    public Transform[] puntosRespawn;
+
+    private void Awake()
+    {
+        // Configuramos el candado del Singleton
+        if (Instance == null) Instance = this;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
-        // 1. Comprobamos si lo que ha chocado con el cubo es una bola normal o la bola 8
+        // Si una bola se sale del mapa por fuerza, la respawneamos aquí mismo
         if (other.CompareTag("Ball") || other.CompareTag("Ball8"))
         {
-            // 2. Buscamos la posición del centro del tablero usando tu GameModeManager
-            Transform centro = GameModeManager.Instance.centroDelTablero;
+            Vector3 puntoAleatorio = ObtenerPuntoAleatorio();
+            other.transform.position = puntoAleatorio + Vector3.up * 1.0f;
 
-            if (centro != null)
+            Rigidbody rb = other.GetComponent<Rigidbody>();
+            if (rb != null)
             {
-                // 3. Teletransportamos la bola. Le sumamos un poco de altura (Vector3.up * 1.0f) 
-                // para que caiga limpiamente desde arriba y no se atasque dentro de la mesa.
-                other.transform.position = centro.position + Vector3.up * 1.0f;
-
-                // 4. Frenamos la bola por completo. 
-                // Si no hacemos esto, la bola reaparecería en el centro pero conservando 
-                // la velocidad con la que salió volando.
-                Rigidbody rb = other.GetComponent<Rigidbody>();
-                if (rb != null)
-                {
-                    rb.linearVelocity = Vector3.zero; 
-                    rb.angularVelocity = Vector3.zero;
-                }
-
-                Debug.Log($"¡Oops! La bola {other.name} se salió del mapa. Devuelta al centro.");
+                rb.linearVelocity = Vector3.zero;
+                rb.angularVelocity = Vector3.zero;
             }
-            else
-            {
-                Debug.LogWarning("No se encontró 'Centro Del Tablero' en GameModeManager.");
-            }
+            Debug.Log($"¡Oops! La bola {other.name} se salió del mapa. Rescatada en punto aleatorio.");
         }
+    }
+
+    // FUNCIÓN MÁGICA: Cualquiera puede llamarla para obtener una posición al azar
+    public Vector3 ObtenerPuntoAleatorio()
+    {
+        if (puntosRespawn != null && puntosRespawn.Length > 0)
+        {
+            int r = Random.Range(0, puntosRespawn.Length);
+            return puntosRespawn[r].position;
+        }
+        return Vector3.zero; // Por si acaso no arrastraste puntos
     }
 }
