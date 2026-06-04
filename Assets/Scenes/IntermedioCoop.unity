@@ -169,7 +169,7 @@ MonoBehaviour:
   dificilP2: {fileID: 1315073133}
   botonBack: {fileID: 929006418}
   escenaFacil: SampleScene
-  escenaDificil: SampleSceneD
+  escenaDificil: SampleSceneD 1
   escenaLobby: StartScene
   animador: {fileID: 2009264523}
 --- !u!1 &42478893
@@ -8474,7 +8474,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrackingManager
   calibrationUI: {fileID: 1154398784}
   trackingInterface: {fileID: 1154398778}
-  enableTracking: 0
+  enableTracking: 1
   numberOfPlayers: 2
   numberOfBaseStations: 4
   enableRotation: 0

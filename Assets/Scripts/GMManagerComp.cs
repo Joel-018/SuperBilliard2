@@ -107,7 +107,7 @@ public class GMManagerComp : MonoBehaviour
 
     void Start()
     {
-        totalBalls = GameObject.FindGameObjectsWithTag("Ball").Length + 1;
+        totalBalls = GameObject.FindGameObjectsWithTag("Ball").Length;
         bolasIniciales = totalBalls;
         tiempoMaximo = timeRemaining;
 

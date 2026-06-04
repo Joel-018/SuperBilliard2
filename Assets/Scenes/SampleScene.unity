@@ -2104,7 +2104,7 @@ Transform:
   m_GameObject: {fileID: 479695855}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -41, y: -1.50012, z: 550}
+  m_LocalPosition: {x: -41, y: -1.50012, z: 560}
   m_LocalScale: {x: 1000, y: 1000, z: 1000}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4257,6 +4257,7 @@ MonoBehaviour:
   separacionBolasVillano: 6
   bolasVillano: 3
   multiplicadorGravedad: 8
+  duracionGravedad: 8
   sonidoTornado: {fileID: 8300000, guid: c2d597ff7842e0e4ebf7edbdf038d20c, type: 3}
   sonidoVillano: {fileID: 8300000, guid: 973b7d6ad08d23249929a55c34e6b305, type: 3}
   sonidoGravedad: {fileID: 8300000, guid: b91de8a3754dda0409f89e55c874d1a2, type: 3}
@@ -8285,7 +8286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TrackingManager
   calibrationUI: {fileID: 1154398784}
   trackingInterface: {fileID: 1154398778}
-  enableTracking: 0
+  enableTracking: 1
   numberOfPlayers: 2
   numberOfBaseStations: 4
   enableRotation: 0
@@ -8329,7 +8330,7 @@ Transform:
   m_GameObject: {fileID: 2082586450}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.9, y: 0, z: 13.4}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []

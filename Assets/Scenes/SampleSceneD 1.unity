@@ -4241,7 +4241,7 @@ MonoBehaviour:
   timeRemaining: 12
   totalBalls: 0
   tiempoRecompensa: 5
-  forzarEvento: 2
+  forzarEvento: 0
   prefabsDeBolas:
   - {fileID: 1053205448946223583, guid: 4d4cf5f09e85e7d4ca52ef84a7760359, type: 3}
   - {fileID: 5886263480070877226, guid: 593a3d2fe1868f4479609c74b7b7ee27, type: 3}
@@ -4257,6 +4257,7 @@ MonoBehaviour:
   separacionBolasVillano: 6
   bolasVillano: 5
   multiplicadorGravedad: 10
+  duracionGravedad: 8
   sonidoTornado: {fileID: 8300000, guid: c2d597ff7842e0e4ebf7edbdf038d20c, type: 3}
   sonidoVillano: {fileID: 8300000, guid: 973b7d6ad08d23249929a55c34e6b305, type: 3}
   sonidoGravedad: {fileID: 8300000, guid: b91de8a3754dda0409f89e55c874d1a2, type: 3}

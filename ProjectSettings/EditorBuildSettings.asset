@@ -20,6 +20,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/IntermedioCoop.unity
     guid: 3d5705eac067160448955da80fb939f4
+  - enabled: 1
+    path: Assets/Scenes/SampleSceneD 1.unity
+    guid: a292af6f55cba904e80ecb0c85b4a122
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
   m_UseUCBPForAssetBundles: 0
