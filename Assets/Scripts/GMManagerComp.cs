@@ -47,6 +47,7 @@ public class GMManagerComp : MonoBehaviour
     public AudioClip sonidoTornado;
     public AudioClip sonidoVillano;
     public AudioClip sonidoGravedad;
+    public AudioClip stunElectricSound;
     private AudioSource altavoz;
 
     [Header("Textos de la Interfaz")]
@@ -409,57 +410,54 @@ public class GMManagerComp : MonoBehaviour
     // ==========================================
 
     public void RobarPuntoYAturdir(string atacante, string victima)
+{
+    // 1. Validaciones iniciales
+    if (gameEnded) return;
+
+    // 2. Transferencia de puntos y aplicación del estado 'Stun'
+    if (victima == "Player1")
     {
-        if (gameEnded) return;
-
-        // 1. Transferencia de puntos (Solo si la víctima tiene puntos para robar)
-        if (victima == "Player1")
+        if (puntosP1 > 0)
         {
-            if (puntosP1 > 0)
-            {
-                puntosP1 -= 1;
-                puntosP2 += 1;
-                Debug.Log($"¡ROBO! Player 2 le roba 1 punto a Player 1.");
-            }
-            else
-            {
-                Debug.Log($"¡Pelotazo! Player 1 ya tiene 0 puntos, no se le puede robar.");
-            }
-            isPlayer1Stunned = true; // Se queda aturdido de todas formas
+            puntosP1 -= 1;
+            puntosP2 += 1;
+            Debug.Log("¡ROBO! Player 2 le roba 1 punto a Player 1.");
         }
-        else if (victima == "Player2")
-        {
-            if (puntosP2 > 0)
-            {
-                puntosP2 -= 1;
-                puntosP1 += 1;
-                Debug.Log($"¡ROBO! Player 1 le roba 1 punto a Player 2.");
-            }
-            else
-            {
-                Debug.Log($"¡Pelotazo! Player 2 ya tiene 0 puntos, no se le puede robar.");
-            }
-            isPlayer2Stunned = true; // Se queda aturdido de todas formas
-        }
-
-        // 2. Actualizamos la pantalla al instante
-        ActualizarMarcadoresUI();
-
-        // 3. CONGELAR FÍSICAMENTE AL JUGADOR
-        GameObject jugadorVictima = GameObject.FindGameObjectWithTag(victima);
-        if (jugadorVictima != null)
-        {
-            Rigidbody rbJugador = jugadorVictima.GetComponent<Rigidbody>();
-            if (rbJugador != null)
-            {
-                // Congelamos todas las posiciones y rotaciones (Se queda clavado)
-                rbJugador.constraints = RigidbodyConstraints.FreezeAll;
-            }
-        }
-
-        // 4. Iniciamos el reloj de 2 segundos para que se recupere
-        StartCoroutine(RutinaDesaturdir(victima));
+        isPlayer1Stunned = true;
     }
+    else if (victima == "Player2")
+    {
+        if (puntosP2 > 0)
+        {
+            puntosP2 -= 1;
+            puntosP1 += 1;
+            Debug.Log("¡ROBO! Player 1 le roba 1 punto a Player 2.");
+        }
+        isPlayer2Stunned = true;
+    }
+
+    // 3. Efectos Audiovisuales (Interfaz y Sonido Eléctrico)
+    ActualizarMarcadoresUI();
+    
+    if (altavoz != null && stunElectricSound != null)
+    {
+        altavoz.PlayOneShot(stunElectricSound);
+    }
+
+    // 4. Congelación física de la víctima
+    GameObject jugadorVictima = GameObject.FindGameObjectWithTag(victima);
+    if (jugadorVictima != null)
+    {
+        Rigidbody rbJugador = jugadorVictima.GetComponent<Rigidbody>();
+        if (rbJugador != null)
+        {
+            rbJugador.constraints = RigidbodyConstraints.FreezeAll;
+        }
+    }
+
+    // 5. Iniciar recuperación del jugador (2 segundos)
+    StartCoroutine(RutinaDesaturdir(victima));
+}
 
     private IEnumerator RutinaDesaturdir(string victima)
     {
