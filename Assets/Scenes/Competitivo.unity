@@ -8919,6 +8919,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3158816077804735820, guid: c8268dc2f1dfbe34e926240f356dd6af, type: 3}
+      propertyPath: m_Mass
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3158816077804735820, guid: c8268dc2f1dfbe34e926240f356dd6af, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3158816077804735820, guid: c8268dc2f1dfbe34e926240f356dd6af, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3878341817126576151, guid: c8268dc2f1dfbe34e926240f356dd6af, type: 3}
       propertyPath: m_Name
       value: Sphere2 comp
@@ -8979,6 +8991,18 @@ PrefabInstance:
     - target: {fileID: 5029393240845040101, guid: 639f0ef60d5a6f54685563213abef371, type: 3}
       propertyPath: m_Name
       value: Sphere1 comp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5561790700143372591, guid: 639f0ef60d5a6f54685563213abef371, type: 3}
+      propertyPath: m_Mass
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5561790700143372591, guid: 639f0ef60d5a6f54685563213abef371, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5561790700143372591, guid: 639f0ef60d5a6f54685563213abef371, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -9104,6 +9128,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 7844154145162575903, guid: ec8e57d7e5376e942b8da1fd41469020, type: 3}
+      propertyPath: m_Mass
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7844154145162575903, guid: ec8e57d7e5376e942b8da1fd41469020, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7844154145162575903, guid: ec8e57d7e5376e942b8da1fd41469020, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9161,6 +9197,22 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8125267608336087278, guid: 938394dd6c9036f499f98dcf314459d0, type: 3}
+      propertyPath: m_Mass
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8125267608336087278, guid: 938394dd6c9036f499f98dcf314459d0, type: 3}
+      propertyPath: m_ImplicitCom
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8125267608336087278, guid: 938394dd6c9036f499f98dcf314459d0, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8125267608336087278, guid: 938394dd6c9036f499f98dcf314459d0, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -9182,6 +9234,18 @@ PrefabInstance:
     - target: {fileID: 4258582272444289028, guid: 45feeaf231b1a5947b8a853369ed4748, type: 3}
       propertyPath: m_Name
       value: Sphere7 comp
+      objectReference: {fileID: 0}
+    - target: {fileID: 6459554007566593187, guid: 45feeaf231b1a5947b8a853369ed4748, type: 3}
+      propertyPath: m_Mass
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6459554007566593187, guid: 45feeaf231b1a5947b8a853369ed4748, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6459554007566593187, guid: 45feeaf231b1a5947b8a853369ed4748, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6922529340827411593, guid: 45feeaf231b1a5947b8a853369ed4748, type: 3}
       propertyPath: m_LocalPosition.x
@@ -9315,6 +9379,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2053488473}
     m_Modifications:
+    - target: {fileID: 3413116678424927518, guid: b22bbee7e46ba1946840f9e18e53940f, type: 3}
+      propertyPath: m_Mass
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3413116678424927518, guid: b22bbee7e46ba1946840f9e18e53940f, type: 3}
+      propertyPath: m_LinearDamping
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3413116678424927518, guid: b22bbee7e46ba1946840f9e18e53940f, type: 3}
+      propertyPath: m_AngularDamping
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3742589830714889653, guid: b22bbee7e46ba1946840f9e18e53940f, type: 3}
       propertyPath: m_Name
       value: Sphere5 comp

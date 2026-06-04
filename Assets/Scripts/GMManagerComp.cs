@@ -107,7 +107,7 @@ public class GMManagerComp : MonoBehaviour
 
     void Start()
     {
-        totalBalls = GameObject.FindGameObjectsWithTag("Ball").Length;
+        totalBalls = GameObject.FindGameObjectsWithTag("Ball").Length + 1;
         bolasIniciales = totalBalls;
         tiempoMaximo = timeRemaining;
 
@@ -196,7 +196,7 @@ public class GMManagerComp : MonoBehaviour
         if (faseMuerteSubita)
         {
             totalBalls--;
-
+            Debug.Log($"Quedan {totalBalls}");
             // Control de eventos normales en mitad de partida
             int bolasMetidas = bolasIniciales - totalBalls;
             if (!eventoYaLanzado && bolasMetidas >= (bolasIniciales / 2))
