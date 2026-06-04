@@ -4273,7 +4273,7 @@ MonoBehaviour:
   faseMuerteSubita: 0
   isPlayer1Stunned: 0
   isPlayer2Stunned: 0
-  forzarEvento: 0
+  forzarEvento: 3
   prefabsDeBolas:
   - {fileID: 5029393240845040101, guid: 639f0ef60d5a6f54685563213abef371, type: 3}
   - {fileID: 3878341817126576151, guid: c8268dc2f1dfbe34e926240f356dd6af, type: 3}
@@ -4805,7 +4805,7 @@ Transform:
   m_GameObject: {fileID: 1316561281}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1.21, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8597,7 +8597,7 @@ Transform:
   m_GameObject: {fileID: 2082586450}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.91, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 5, y: 5, z: 5}
   m_ConstrainProportionsScale: 0
   m_Children: []

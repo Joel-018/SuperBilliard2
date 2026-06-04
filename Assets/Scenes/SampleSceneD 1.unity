@@ -4276,7 +4276,7 @@ MonoBehaviour:
   timeRemaining: 12
   totalBalls: 0
   tiempoRecompensa: 5
-  forzarEvento: 0
+  forzarEvento: 3
   prefabsDeBolas:
   - {fileID: 1053205448946223583, guid: 4d4cf5f09e85e7d4ca52ef84a7760359, type: 3}
   - {fileID: 5886263480070877226, guid: 593a3d2fe1868f4479609c74b7b7ee27, type: 3}
