@@ -380,7 +380,7 @@ public class GameModeManager : MonoBehaviour
         shadow.rectTransform.offsetMin = new Vector2(-4f, -4f);
         shadow.rectTransform.offsetMax = new Vector2(4f, 4f);
 
-        // ── Marco exterior dorado grueso (estilo borde de mesa de billar) ────
+        // ── Marco exterior dorado grueso ────
         var frameOuter = MakeImage(root, "FrameOuter", new Color(0.55f, 0.38f, 0.08f, 1f)); // madera dorada
         StretchFull(frameOuter.rectTransform);
 

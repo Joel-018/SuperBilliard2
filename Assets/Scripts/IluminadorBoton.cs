@@ -13,11 +13,11 @@ public class IluminadorBoton : MonoBehaviour
 
     void Start()
     {
-        // Autocompletar si se nos olvida arrastrarlos en el Inspector
+    
         if (detector == null) detector = GetComponent<DetectorCaja>();
         if (miMesh == null) miMesh = GetComponent<MeshRenderer>();
 
-        // Guardamos el color apagado que le hayas puesto en Unity
+        
         if (miMesh != null)
         {
             colorOriginal = miMesh.material.color;

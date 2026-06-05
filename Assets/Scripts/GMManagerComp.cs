@@ -473,9 +473,7 @@ public class GMManagerComp : MonoBehaviour
             Rigidbody rbJugador = jugadorVictima.GetComponent<Rigidbody>();
             if (rbJugador != null)
             {
-                // IMPORTANTE: Lo habitual en los jugadores es que no se caigan hacia los lados, 
-                // así que descongelamos la posición pero dejamos congelada la rotación.
-                // Si en tu juego usas otra configuración, dímelo y lo ajustamos.
+             
                 rbJugador.constraints = RigidbodyConstraints.FreezeRotation;
             }
         }

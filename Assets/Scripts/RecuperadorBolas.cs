@@ -32,7 +32,7 @@ public class RecuperadorDeBolasComp : MonoBehaviour
         }
     }
 
-    // FUNCIÓN MÁGICA: Cualquiera puede llamarla para obtener una posición al azar
+    // FUNCIÓN: Cualquiera puede llamarla para obtener una posición al azar
     public Vector3 ObtenerPuntoAleatorio()
     {
         if (puntosRespawn != null && puntosRespawn.Length > 0)
@@ -40,6 +40,6 @@ public class RecuperadorDeBolasComp : MonoBehaviour
             int r = Random.Range(0, puntosRespawn.Length);
             return puntosRespawn[r].position;
         }
-        return Vector3.zero; // Por si acaso no arrastraste puntos
+        return Vector3.zero; 
     }
 }

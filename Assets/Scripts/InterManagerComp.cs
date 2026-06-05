@@ -17,7 +17,7 @@ public class InterManagerComp : MonoBehaviour
 
     void Update()
     {
-        // 1. ¿Alguien ha pisado el botón de Back? (Prioridad absoluta)
+        // 1. ¿Alguien ha pisado el botón de Back? 
         if (botonBack.jugadorDentro)
         {
             if (transicionIniciada) animador.CancelarAnimacion();

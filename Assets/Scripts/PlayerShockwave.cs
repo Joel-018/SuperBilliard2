@@ -20,13 +20,11 @@ public class PlayerShockwave : MonoBehaviour
 
     void Start()
     {
-        // --- 1. CONFIGURACIÓN INFALIBLE DE AUDIO ---
         // Buscamos si el jugador ya tiene un altavoz. Si no, le creamos uno invisible.
         miAltavoz = GetComponent<AudioSource>();
         if (miAltavoz == null) miAltavoz = gameObject.AddComponent<AudioSource>();
         
-        // La clave: Le decimos que sea un sonido 2D (0 = 2D, 1 = 3D). 
-        // Así no importa dónde esté la cámara, siempre sonará fuerte y claro.
+
         miAltavoz.spatialBlend = 0f; 
 
 
