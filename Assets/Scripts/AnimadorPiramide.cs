@@ -11,8 +11,9 @@ public class AnimadorPiramide : MonoBehaviour
     public float velocidadBolas = 15f;
 
     private List<Vector3> posicionesFinales = new List<Vector3>();
-    private Coroutine corrutinaAnimacion; // Aquí guardaremos la animación en curso
+    private Coroutine corrutinaAnimacion;
 
+    // Prepara las bolas guardando sus posiciones finales y desactivándolas al inicio
     void Awake()
     {
         foreach (GameObject bola in bolasVisuales)
@@ -22,15 +23,16 @@ public class AnimadorPiramide : MonoBehaviour
         }
     }
 
+    // Detiene cualquier animación en curso e inicia la secuencia de animación y carga de escena
     public void IniciarAnimacion(string escenaDestino)
     {
-        // Si ya hay una animación, la paramos por seguridad
+      
         if (corrutinaAnimacion != null) StopCoroutine(corrutinaAnimacion);
 
         corrutinaAnimacion = StartCoroutine(AnimarYCargar(escenaDestino));
     }
 
-    // NUEVO: Función para cancelar y esconder las bolas
+    // Función para cancelar y esconder las bolas
     public void CancelarAnimacion()
     {
         if (corrutinaAnimacion != null)
@@ -46,6 +48,7 @@ public class AnimadorPiramide : MonoBehaviour
         }
     }
 
+    //Ejecuta la animación de las bolas y carga la escena de destino al finalizar
     private IEnumerator AnimarYCargar(string escenaDestinoFinal)
     {
         for (int i = 0; i < bolasVisuales.Count; i++)

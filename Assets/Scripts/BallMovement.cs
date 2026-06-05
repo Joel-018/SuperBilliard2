@@ -25,7 +25,6 @@ public class BallMovement : MonoBehaviour
 
     private List<Collider> jugadoresEnCooldown = new List<Collider>();
     
-    // --- NUEVO: CANDADO PARA EVITAR QUE PUNTÚE VARIAS VECES ---
     private bool yaHaCaido = false;
 
     void Start()
@@ -36,6 +35,7 @@ public class BallMovement : MonoBehaviour
         miCollider = GetComponent<Collider>();
     }
 
+    // Colisiones físicas, reproduce sonidos de choque y aplica impulso a la bola si es empujada por un jugador
     void OnCollisionEnter(Collision colision)
     {
         if (colision.gameObject.CompareTag("Player") || colision.gameObject.CompareTag("Ball") || colision.gameObject.CompareTag("Ball8"))
@@ -58,6 +58,7 @@ public class BallMovement : MonoBehaviour
         }
     }
 
+    ////Desactiva temporalmente las colisiones con el jugador que chutó para evitar efectos de arrastre.
     private IEnumerator ActivarCooldownJugador(Collider playerCollider)
     {
          yield return new WaitForSeconds(2f);
@@ -68,12 +69,12 @@ public class BallMovement : MonoBehaviour
          jugadoresEnCooldown.Remove(playerCollider);
      }
 
+    //// Detecta la entrada en el agujero, desactiva la física y determina si la partida se gana, se pierde (bola 8 antes de tiempo)
     void OnTriggerEnter(Collider otro)
     {
-        // --- AQUÍ ESTÁ LA MAGIA: Comprobamos que !yaHaCaido ---
         if (otro.CompareTag("Hole") && !yaHaCaido)
         {
-            yaHaCaido = true; // Echamos el candado. Ya no volverá a contar esta bola.
+            yaHaCaido = true; // Ya no volverá a contar esta bola.
             rb.isKinematic = true;
 
             if (gameObject.CompareTag("Ball8"))
@@ -97,6 +98,7 @@ public class BallMovement : MonoBehaviour
         }
     }
 
+    // Animación visual de encogimiento de la bola simulando la caída y destruye el objeto al finalizar
     IEnumerator CaerPorElAgujero()
     {
         while (check)

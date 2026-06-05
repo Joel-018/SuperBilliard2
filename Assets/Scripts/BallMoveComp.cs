@@ -42,6 +42,7 @@ public class BallMovComp : MonoBehaviour
         miCollider = GetComponent<Collider>();
     }
 
+    // Actualiza el estado, color y desvanecimiento de la estela
     private void ActualizarEstela()
     {
         if (estela == null) return;
@@ -49,7 +50,7 @@ public class BallMovComp : MonoBehaviour
         if (ultimoJugador == "Player1")
         {
             estela.startColor = colorP1;
-            estela.endColor = new Color(colorP1.r, colorP1.g, colorP1.b, 0f); // Se desvanece a transparente
+            estela.endColor = new Color(colorP1.r, colorP1.g, colorP1.b, 0f);
             estela.emitting = true;
         }
         else if (ultimoJugador == "Player2")
@@ -65,21 +66,21 @@ public class BallMovComp : MonoBehaviour
         }
     }
 
+    //Chutar la bola, la lógica de aturdimiento a rivales y reproduce sonidos.
     void OnCollisionEnter(Collision colision)
     {
         string tagChoque = colision.gameObject.tag;
 
         if (tagChoque == "Player1" || tagChoque == "Player2")
         {
-            // 1. FASE DE ZOMBIE: Si el jugador está aturdido, no puede interactuar con la bola
+            // 1. Si el jugador está aturdido, no puede interactuar con la bola
             bool aturdido = (tagChoque == "Player1" && GMManagerComp.Instance.isPlayer1Stunned) ||
                             (tagChoque == "Player2" && GMManagerComp.Instance.isPlayer2Stunned);
 
-            // Si está aturdido, cortamos aquí. La bola rebotará en él como si fuera una pared de piedra.
+            // Si está aturdido, no hacemos nada.
             if (aturdido) return;
 
-            // 2. FASE DE PELOTAZO: ¿La bola es del rival y va a cierta velocidad?
-            // (linearVelocity.magnitude > 1.5f asegura que la bola lleva impulso real)
+            // 2. La bola es del rival y va a cierta velocidad?
             if (ultimoJugador != "" && ultimoJugador != tagChoque && rb.linearVelocity.magnitude > 1.5f)
             {
                 Debug.Log($"¡ZASCA! {ultimoJugador} le ha pegado un pelotazo a {tagChoque}!");
@@ -92,10 +93,10 @@ public class BallMovComp : MonoBehaviour
 
                 // Borramos la memoria de la bola para que no robe puntos 2 veces seguidas rebotando
                 ultimoJugador = "";
-                return; // Cortamos aquí para que la víctima no pueda chutarla de vuelta
+                return; // Hacemos return aquí para que la víctima no pueda chutarla de vuelta
             }
 
-            // 3. FASE NORMAL: El jugador toca la bola para chutarla
+            // 3. El jugador toca la bola para chutarla
             ultimoJugador = tagChoque;
 
             ActualizarEstela();
@@ -121,6 +122,7 @@ public class BallMovComp : MonoBehaviour
         }
     }
 
+    //Desactiva temporalmente las colisiones con el jugador que chutó para evitar efectos de arrastre.
     private IEnumerator ActivarCooldownJugador(Collider playerCollider)
     {
         yield return new WaitForSeconds(2f);
@@ -131,6 +133,7 @@ public class BallMovComp : MonoBehaviour
         jugadoresEnCooldown.Remove(playerCollider);
     }
 
+    //Temporizador para resetear la propiedad de la bola si no es tocada en 5 segundos.
     private IEnumerator ExpirarUltimoJugador()
     {
         // Esperamos 5 segundos
@@ -160,9 +163,10 @@ public class BallMovComp : MonoBehaviour
         }
     }
 
+    // Detecta la entrada en el agujero, detiene la física, notifica al Manager para puntuar e inicia la secuencia de caída.
     IEnumerator CaerPorElAgujero()
     {
-        // 1. Animación de encogerse (idéntica)
+        // 1. Animación de encogerse
         while (check)
         {
             if (percentScaled < 1f)
@@ -178,7 +182,7 @@ public class BallMovComp : MonoBehaviour
             }
         }
 
-        // 2. ¿Muerte Súbita o Reaparición?
+        // 2. Queda timepo?
         if (!GMManagerComp.Instance.faseMuerteSubita)
         {
             // FASE NORMAL: Pedimos el punto aleatorio al Recuperador de Bolas
